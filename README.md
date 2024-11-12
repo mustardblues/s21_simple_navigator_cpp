@@ -1,1 +1,1 @@
-# School 21 A1_SimpleNavigator_CPP
+# School 21 A2_SimpleNavigator_CPP
