@@ -1,2 +1,1 @@
-# s21_simple_navigator_cpp
-School 21 project. Created by zekkoaem, ferdinan, stranger.
+# School 21 A1_SimpleNavigator_CPP
