@@ -1,7 +1,7 @@
 // Copyright 2024 Team TL:stranger@student.21-school.ru
 
-#ifndef _A1_SIMPLE_NAVIGATOR_SRC_GRAPTH_GRAPH_HPP_
-#define _A1_SIMPLE_NAVIGATOR_SRC_GRAPTH_GRAPH_HPP_
+#ifndef _A1_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
+#define _A1_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 
 #include <iostream>
 #include <fstream>
@@ -10,6 +10,11 @@
 #include <string>
 
 namespace s21{
+
+enum class GraphType{
+    Directed,
+    Undirected
+};
 
 /**
  * @class Graph
@@ -49,7 +54,7 @@ public:
      * @param col Column element index.
      * @return Value stored in the graph.
      */
-    [[ nodiscard ]] unsigned int operator () (const std::size_t row, const std::size_t col) const;
+    unsigned int operator () (const std::size_t row, const std::size_t col) const;
 
     /**
      * @brief Get graph information from adjacency matrices.
@@ -63,12 +68,23 @@ public:
      * @param filename The name of dot file to export.
      * @return 0 if the export to dot file was invalid, or 1 if the export was successful.
      */
+    template <GraphType T>
     bool exportGraphToDot(const std::string& filename) const;
 
     /**
-     * @brief Returns the number of vertices.
+     * @brief Return the number of vertices.
      */
-    inline std::size_t length() const { return length_; }
+    std::size_t length() const { return length_; }
+
+    /**
+     * @brief Return first pointer.
+     */
+    const unsigned int* begin() const { return data_; }
+
+    /**
+     * @brief Return last pointer.
+     */
+    const unsigned int* end() const { return data_ + length_ * length_; }
 
 private:
     std::string getFileContent(const std::string& filename);
@@ -81,4 +97,4 @@ private:
 
 } // namespace s21
 
-#endif // _A1_SIMPLE_NAVIGATOR_SRC_GRAPTH_GRAPH_HPP_
+#endif // _A1_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_

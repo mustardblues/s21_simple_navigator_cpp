@@ -1,4 +1,4 @@
-// Copyright 2024 Team TL:stranger@student.21-school.ru
+// Copyright 2024 stranger
 
 #include "graph.hpp"
 
@@ -60,14 +60,6 @@ Graph& Graph::operator = (Graph&& other) noexcept{
     return *this;
 }
 
-[[ nodiscard ]] unsigned int Graph::operator () (const std::size_t row, const std::size_t col) const{
-    if(row < length_ && col < length_){
-        return *(data_ + (row * length_ + col));
-    }
-
-    return 0;
-}
-
 [[ nodiscard ]] unsigned int& Graph::operator () (const std::size_t row, const std::size_t col){
     if(row < length_ && col < length_){
         return *(data_ + (row * length_ + col));
@@ -76,6 +68,14 @@ Graph& Graph::operator = (Graph&& other) noexcept{
     static unsigned int default_value{0};
 
     return default_value;
+}
+
+unsigned int Graph::operator () (const std::size_t row, const std::size_t col) const{
+    if(row < length_ && col < length_){
+        return *(data_ + (row * length_ + col));
+    }
+
+    return 0;
 }
 
 bool Graph::loadGraphFromFile(const std::string& filename){
@@ -116,21 +116,52 @@ std::string Graph::getFileContent(const std::string& filename){
     return content;
 }
 
-bool Graph::exportGraphToDot(const std::string& filename) const{
+template <>
+bool Graph::exportGraphToDot<GraphType::Undirected>(const std::string& filename) const{
+    if(length_ == 0) return false;
+
     std::fstream stream(filename, std::ios::out);
+
+    
 
     stream << "graph graphname {\n";
 
     for(unsigned int i = 0; i < length_; ++i){
+        stream << "\t" << i + 1 << ";\n";
+    }
+
+    for(unsigned int i = 0; i < length_; ++i){
         for(unsigned int j = i; j < length_; ++j){
-            if(data_[i * length_ + j] != 0){
-                stream << "\t" << i + 1 << " -> " << j + 1 << ";" << std::endl;
+            if(data_[i * length_ + j] && data_[j * length_ + i]){
+                stream << "\t" << i + 1 << " -- " << j + 1 << ";\n";
             }
-            else if(data_[j * length_ + i] != 0){
-                stream << "\t" << i + 1 << " <- " << j + 1 << ";" << std::endl;
+        }
+    }
+
+    stream << "}";
+
+    return true;
+}
+
+template <>
+bool Graph::exportGraphToDot<GraphType::Directed>(const std::string& filename) const{
+    if(length_ == 0) return false;
+
+    std::fstream stream(filename, std::ios::out);
+
+    stream << "digraph graphname {\n";
+
+    for(unsigned int i = 0; i < length_; ++i){
+        stream << "\t" << i + 1 << ";\n";
+    }
+
+    for(unsigned int i = 0; i < length_; ++i){
+        for(unsigned int j = i; j < length_; ++j){
+            if(data_[i * length_ + j]){
+                stream << "\t" << i + 1 << " -> " << j + 1 << ";\n";
             }
-            else{
-                stream << "\t" << i + 1 << " -- " << j + 1 << ";" << std::endl;
+            else if(data_[j * length_ + i]){
+                stream << "\t" << j + 1 << " -> " << i + 1 << ";\n";
             }
         }
     }
