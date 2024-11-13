@@ -9,8 +9,6 @@ Graph::Graph() : length_(0), data_(nullptr) {}
 Graph::Graph(const std::size_t length) : length_(length), data_(new unsigned int[length_ * length_]{}){}
 
 Graph::Graph(const Graph& other){
-    if(this == &other) return;
-
     length_ = other.length_;
 
     data_ = new unsigned int[length_ * length_]{};
@@ -118,11 +116,9 @@ std::string Graph::getFileContent(const std::string& filename){
 
 template <>
 bool Graph::exportGraphToDot<GraphType::Undirected>(const std::string& filename) const{
-    if(length_ == 0) return false;
+    if(filename.length() == 0 || length_ == 0) return false;
 
-    std::fstream stream(filename, std::ios::out);
-
-    
+    std::fstream stream(filename + ".dot", std::ios::out);
 
     stream << "graph graphname {\n";
 
@@ -145,9 +141,9 @@ bool Graph::exportGraphToDot<GraphType::Undirected>(const std::string& filename)
 
 template <>
 bool Graph::exportGraphToDot<GraphType::Directed>(const std::string& filename) const{
-    if(length_ == 0) return false;
+    if(filename.length() == 0 || length_ == 0) return false;
 
-    std::fstream stream(filename, std::ios::out);
+    std::fstream stream(filename + ".dot", std::ios::out);
 
     stream << "digraph graphname {\n";
 

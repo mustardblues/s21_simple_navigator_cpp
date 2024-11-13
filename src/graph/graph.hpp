@@ -1,7 +1,7 @@
-// Copyright 2024 Team TL:stranger@student.21-school.ru
+// Copyright 2024 stranger
 
-#ifndef _A1_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
-#define _A1_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
+#ifndef _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
+#define _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 
 #include <iostream>
 #include <fstream>
@@ -11,7 +11,11 @@
 
 namespace s21{
 
-enum class GraphType{
+/**
+ * @enum GraphType
+ * @brief Contans information about graph types.
+ */
+enum class GraphType : int{
     Directed,
     Undirected
 };
@@ -57,6 +61,21 @@ public:
     unsigned int operator () (const std::size_t row, const std::size_t col) const;
 
     /**
+     * @brief Return the number of vertices.
+     */
+    std::size_t length() const { return length_; }
+
+    /**
+     * @brief Return a constant first pointer from the graph.
+     */
+    const unsigned int* begin() const { return data_; }
+
+    /**
+     * @brief Return a constant last pointer from the graph.
+     */
+    const unsigned int* end() const { return data_ + length_ * length_; }
+
+    /**
      * @brief Get graph information from adjacency matrices.
      * @param filename The name of the file storing the adjacency matrices.
      * @return 0 if the load was in error, or 1 if the graph information was received.
@@ -71,21 +90,6 @@ public:
     template <GraphType T>
     bool exportGraphToDot(const std::string& filename) const;
 
-    /**
-     * @brief Return the number of vertices.
-     */
-    std::size_t length() const { return length_; }
-
-    /**
-     * @brief Return first pointer.
-     */
-    const unsigned int* begin() const { return data_; }
-
-    /**
-     * @brief Return last pointer.
-     */
-    const unsigned int* end() const { return data_ + length_ * length_; }
-
 private:
     std::string getFileContent(const std::string& filename);
     
@@ -97,4 +101,4 @@ private:
 
 } // namespace s21
 
-#endif // _A1_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
+#endif // _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
