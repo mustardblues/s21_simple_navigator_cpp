@@ -13,7 +13,7 @@ namespace s21{
 
 /**
  * @enum GraphType
- * @brief Contans information about graph types.
+ * @brief Contains information about graph types.
  */
 enum class GraphType : int{
     Directed,
@@ -45,7 +45,7 @@ public:
     Graph& operator = (Graph&& other) noexcept;
 
     /**
-     * @brief Provide access to graph without segmentation fault.
+     * @brief Provides access to graph without segmentation fault.
      * @param row Row element index.
      * @param col Column element index.
      * @return Element reference from graph.
@@ -53,7 +53,7 @@ public:
     [[ nodiscard ]] unsigned int& operator () (const std::size_t row, const std::size_t col);
 
     /**
-     * @brief Provide access to graph without segmentation fault.
+     * @brief Provides access to graph without segmentation fault.
      * @param row Row element index.
      * @param col Column element index.
      * @return Value stored in the graph.
@@ -61,29 +61,35 @@ public:
     unsigned int operator () (const std::size_t row, const std::size_t col) const;
 
     /**
-     * @brief Return the number of vertices.
+     * @brief Returns the number of vertices.
      */
     std::size_t length() const { return length_; }
 
     /**
-     * @brief Return a constant first pointer from the graph.
+     * @brief Returns a constant first pointer from the graph.
      */
     const unsigned int* begin() const { return data_; }
 
     /**
-     * @brief Return a constant last pointer from the graph.
+     * @brief Returns a constant last pointer from the graph.
      */
     const unsigned int* end() const { return data_ + length_ * length_; }
 
     /**
-     * @brief Get graph information from adjacency matrices.
+     * @brief Access specified element with bounds checking.
+     * @return Element if pos isn't out of range otherwise returns 0.
+     */
+    unsigned int at(const std::size_t pos) { return pos < length_ * length_ ? *(data_ + pos) : 0; } 
+
+    /**
+     * @brief Gets graph information from adjacency matrices.
      * @param filename The name of the file storing the adjacency matrices.
      * @return 0 if the load was in error, or 1 if the graph information was received.
      */
     bool loadGraphFromFile(const std::string& filename);
 
     /**
-     * @brief Export graph information to dot file.
+     * @brief Exports graph information to dot file.
      * @param filename The name of dot file to export.
      * @return 0 if the export to dot file was invalid, or 1 if the export was successful.
      */
