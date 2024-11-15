@@ -8,6 +8,10 @@ Graph::Graph() : length_(0), data_(nullptr) {}
 
 Graph::Graph(const std::size_t length) : length_(length), data_(new unsigned int[length_ * length_]{}){}
 
+Graph::Graph(const std::string& filename) : Graph(){
+    this->loadGraphFromFile(filename);
+}
+
 Graph::Graph(const Graph& other){
     length_ = other.length_;
 
@@ -80,6 +84,8 @@ bool Graph::loadGraphFromFile(const std::string& filename){
     std::stringstream stream(this->getFileContent(filename), std::ios::in);
 
     stream >> length_;
+
+    if(stream.fail()) return false;
 
     if(data_ != nullptr) delete[] data_;
 

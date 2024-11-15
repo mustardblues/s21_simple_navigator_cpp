@@ -1,7 +1,8 @@
 CXX					:= g++
 CXXFLAGS			:= -Wall -Wextra -Werror -pedantic -std=c++17 -g
 
-SOURCES				:= src/graph/graph.cpp
+SOURCES				:=  src/graph/graph.cpp \
+						src/algorithms/algorithms.cpp
 
 .PHONY: all
 all: build

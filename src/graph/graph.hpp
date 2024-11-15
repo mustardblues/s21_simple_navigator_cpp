@@ -3,7 +3,6 @@
 #ifndef _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 #define _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -16,18 +15,22 @@ namespace s21{
  * @brief Contains information about graph types.
  */
 enum class GraphType : int{
-    Directed,
-    Undirected
+    Undirected,
+    Directed
 };
 
 /**
  * @class Graph
- * @brief The class is used to store information about graphs. 
+ * @brief The class is used to store information about graphs.
+ * 
+ * @details Graph class contains data about the vertices and 
+ * edges of a graph in the format of an adjacency matrix.
  */
 class Graph final{
 public:
     Graph();
     Graph(const std::size_t length);
+    Graph(const std::string& filename);
     Graph(const Graph& other);
     Graph(Graph&& other) noexcept;
     ~Graph();
@@ -74,12 +77,6 @@ public:
      * @brief Returns a constant last pointer from the graph.
      */
     const unsigned int* end() const { return data_ + length_ * length_; }
-
-    /**
-     * @brief Access specified element with bounds checking.
-     * @return Element if pos isn't out of range otherwise returns 0.
-     */
-    unsigned int at(const std::size_t pos) { return pos < length_ * length_ ? *(data_ + pos) : 0; } 
 
     /**
      * @brief Gets graph information from adjacency matrices.

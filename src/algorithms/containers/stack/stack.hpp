@@ -3,73 +3,76 @@
 #ifndef _A2_SIMPLE_NAVIGATOR_SRC_CONTAINERS_STACK_HPP_
 #define _A2_SIMPLE_NAVIGATOR_SRC_CONTAINERS_STACK_HPP_
 
+#include "./../node/node.hpp"
+
 namespace s21{
 
+/**
+ * @class Stack
+ * @brief Stack is a container that works according to LIFO rule.
+ * 
+ * @details Stack is a container with elements organized according to 
+ * LIFO (Last-In, First-Out) principle. A stack container class object 
+ * contains pointers to the "head" of the stack; removing and adding elements 
+ * is done strictly from the "head". You can think of the stack as a glass or 
+ * a pipe with one sealed end: in order to get to the element placed in the container 
+ * first, you must take out all the elements on top.
+ */
 template <typename T>
 class Stack final{
 public:
-    using value_type = T;
-
+    /**
+     * @brief Default constructor. Creates an empty data stack.
+     */
     Stack();
-    Stack(const Stack& other);
-    Stack(Stack&& other) noexcept;
+
+    Stack(const Stack& other) = delete;
+    Stack(Stack&& other) noexcept = delete;
+
+    /**
+     * @brief Destructor. Clears all stack data.
+     */
     ~Stack();
 
-    /**
-     * @brief Copying assignment operator.
-     * @param other Graph reference parameter.
-     */
-    Stack& operator = (const Stack& other);
+    Stack& operator = (const Stack& other) = delete;
+    Stack& operator = (Stack&& other) = delete;
 
     /**
-     * @brief Rvalue assignment operator.
-     * @param other Rvalue parameter.
-     */
-    Stack& operator = (Stack&& other);
-
-    /**
-     * @brief Give information about stack's fullness.
+     * @brief Gives information about stack's fullness.
      * @return 0 if the stack is fill and 1 if the stack is empty.
      */
     bool empty() const { return node_ != nullptr ? false : true; }
 
     /**
-     * @brief Access to the top of the stack.
+     * @brief Accesses to the top of the stack.
      */
-    value_type top() const { 
-        return node_ != nullptr ? node_->value_ : value_type{}; 
-    }
+    T top() const { return node_ != nullptr ? node_->value_ : T{}; }
 
     /**
-     * @brief Access to stack size.
+     * @brief Accesses to stack size.
      */
     std::size_t size() const { return size_; }
 
     /**
-     * @brief Add a value to the top of the stack.
+     * @brief Adds a value to the top of the stack.
      */
-    void push(const value_type& value);
+    void push(const T& value);
 
     /**
-     * @brief Delete the top of the stack.
+     * @brief Deletes the top of the stack.
+     * @return The value of the top of the deleted stack.
      */
-    void pop();
+    T pop();
 
     /**
-     * @brief Clean up the stack.
+     * @brief Clears the stack.
      */
     void clear();
 
 private:
-    struct Node final{
-        value_type value_;
-        struct Node* next_;
-    };
-
     std::size_t size_;
 
-    Node* node_;
-
+    Node<T>* node_;
 };
 
 } // namespace s21
