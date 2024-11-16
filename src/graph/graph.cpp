@@ -136,6 +136,10 @@ bool Graph::exportGraphToDot<GraphType::Undirected>(const std::string& filename)
 
     std::string graphname(dot, 0, dot.size() - 4);
 
+    if(std::size_t pos = graphname.find_last_of('/'); pos != std::string::npos){
+        graphname.erase(0, pos + 1);
+    }
+
     stream << "graph " << graphname << " {\n";
 
     for(unsigned int i = 0; i < length_; ++i){
@@ -164,6 +168,10 @@ bool Graph::exportGraphToDot<GraphType::Directed>(const std::string& filename) c
     std::fstream stream(dot, std::ios::out);
 
     std::string graphname(dot, 0, dot.size() - 4);
+
+    if(std::size_t pos = graphname.find_last_of('/'); pos != std::string::npos){
+        graphname.erase(0, pos + 1);
+    }
 
     stream << "digraph " << graphname << " {\n";
 

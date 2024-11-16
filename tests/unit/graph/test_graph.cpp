@@ -279,7 +279,7 @@ TEST(Graph, exportGraphToDot){
         std::copy(list.begin(), list.end(), graph.begin());
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("~");
+        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("");
 
         // Assert
         EXPECT_EQ(code, true);
