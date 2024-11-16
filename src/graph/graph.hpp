@@ -3,6 +3,8 @@
 #ifndef _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 #define _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 
+#include <iostream>
+
 #include <fstream>
 #include <sstream>
 
@@ -14,7 +16,7 @@ namespace s21{
  * @enum GraphType
  * @brief Contains information about graph types.
  */
-enum class GraphType : int{
+enum class GraphType : char{
     Undirected,
     Directed
 };
@@ -28,11 +30,34 @@ enum class GraphType : int{
  */
 class Graph final{
 public:
+    /**
+     * @brief Creates an empty adjacency matrix.
+     */
     Graph();
+
+    /**
+     * @brief Creates an N x N adjacency matrix where N is the length parameter.
+     */
     Graph(const std::size_t length);
+
+    /**
+     * @brief Loads the adjacency matrix from a file.
+     */
     Graph(const std::string& filename);
+
+    /**
+     * @brief Copies data from another object from Graph class.
+     */
     Graph(const Graph& other);
+
+    /**
+     * @brief Moves data from another object from Graph class.
+     */
     Graph(Graph&& other) noexcept;
+
+    /**
+     * @brief Clears all data of the Graph class after leaving the scope.
+     */
     ~Graph();
 
     /**
@@ -46,6 +71,16 @@ public:
      * @param other Rvalue parameter.
      */
     Graph& operator = (Graph&& other) noexcept;
+
+    /**
+     * @brief Compares the adjacency matrices of two graphs.
+     * @return 0 if the graphs aren't equal, or 1 if they are.
+     */
+    constexpr bool operator == (const Graph& other) const{
+        if(length_ != other.length_) return false;
+
+        return std::equal(other.begin(), other.end(), data_);
+    }
 
     /**
      * @brief Provides access to graph without segmentation fault.
@@ -67,6 +102,16 @@ public:
      * @brief Returns the number of vertices.
      */
     std::size_t length() const { return length_; }
+
+    /**
+     * @brief Returns a constant first pointer from the graph.
+     */
+    [[ nodiscard ]] unsigned int* begin() { return data_; }
+
+    /**
+     * @brief Returns a constant last pointer from the graph.
+     */
+    [[ nodiscard ]] unsigned int* end() { return data_ + length_ * length_; }
 
     /**
      * @brief Returns a constant first pointer from the graph.
@@ -93,8 +138,15 @@ public:
     template <GraphType T>
     bool exportGraphToDot(const std::string& filename) const;
 
+    /**
+     * @brief Clears all data of the Graph class.
+     */
+    void clear() { this->~Graph(); }
+
 private:
-    std::string getFileContent(const std::string& filename);
+    inline std::string getFileContent(const std::string& filename);
+
+    inline std::string setValidFileName(const std::string& filename) const;
     
     std::size_t length_;
 

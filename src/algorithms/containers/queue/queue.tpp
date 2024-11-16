@@ -9,13 +9,20 @@ template <typename T>
 Queue<T>::Queue() : size_(0), head_(nullptr), tail_(nullptr) {}
 
 template <typename T>
+Queue<T>::Queue(const std::initializer_list<T>& list) : Queue(){
+    for(const auto value : list){
+        this->push(value);
+    }
+}
+
+template <typename T>
 Queue<T>::~Queue(){
     if(size_ == 0) return;
 
     while(tail_ != nullptr){
         Node<T>* node = tail_;
 
-        tail_ = tail_->next_;
+        tail_ = tail_->prev_;
 
         delete node;
     }
@@ -25,21 +32,21 @@ Queue<T>::~Queue(){
 
 template <typename T>
 void Queue<T>::push(const T& value){
-    Node<T>* node = new Node<T>{};
+    Node<T>* node = new Node<T>;
 
     node->value_ = value;
+    node->next_ = nullptr;
 
     if(head_ == nullptr){
         node->prev_ = nullptr;
-        node->next_ = nullptr;
 
         head_ = node;
         tail_ = node;
     }
     else{
-        tail_->next_ = node;
-
         node->prev_ = tail_;
+
+        tail_->next_ = node;
 
         tail_ = node;
     }
@@ -65,7 +72,7 @@ T Queue<T>::pop(){
 }
 
 template <typename T>
-void Queue<T>::clear(){ this->~Stack(); }
+void Queue<T>::clear(){ this->~Queue(); }
 
 } // namespace s21
 

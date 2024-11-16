@@ -9,6 +9,13 @@ template <typename T>
 Stack<T>::Stack() : size_(0), node_(nullptr) {}
 
 template <typename T>
+Stack<T>::Stack(const std::initializer_list<T>& list) : Stack(){
+    for(const auto value : list){
+        this->push(value);
+    }
+}
+
+template <typename T>
 Stack<T>::~Stack(){
     if(node_ == nullptr) return;
 
@@ -25,7 +32,7 @@ Stack<T>::~Stack(){
 
 template <typename T>
 void Stack<T>::push(const T& value){
-    Node<T>* top = new Node<T>{};
+    Node<T>* top = new Node<T>;
 
     top->value_ = value;
     top->next_ = node_;

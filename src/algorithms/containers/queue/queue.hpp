@@ -10,22 +10,20 @@ namespace s21{
 /**
  * @class Queue
  * @brief Queue is a container that works according to FIFO rule.
- * 
- * @details Queue is a container with elements organized according to 
- * FIFO (First-In, First-Out) principle. Just like a list, an object 
- * of the queue container class has pointers to the "tail" and "head" 
- * of the queue, but the deletion is performed strictly from the "head", 
- * and the addition of new elements is performed strictly in the "tail". 
- * It is convenient to think of a queue as a kind of pipe, with elements 
- * entering at one end and exiting at another one.
  */
 template <typename T>
 class Queue final{
 public:
     /**
-     * @brief Default constructor. Creates an empty data queue.
+     * @brief Creates an empty data queue.
      */
     Queue();
+
+    /**
+     * @brief List constructor. Sets the list values into a queue.
+     * @param list std::initializar_list<T> data type.
+     */
+    Queue(const std::initializer_list<T>& list); 
 
     Queue(const Queue& other) = delete;
     Queue(Queue&& other) noexcept = delete;
@@ -52,12 +50,12 @@ public:
     /**
      * @brief Accesses the value from the beginning of the queue.
      */
-    T front() const { return head_->value_; }
+    T front() const { return head_ != nullptr ? head_->value_ : 0; }
 
     /**
      * @brief Accesses the value from the end of the queue.
      */
-    T back() const { return tail_->value_; }
+    T back() const { return tail_ != nullptr ? tail_->value_ : 0; }
 
     /**
      * @brief Adds a value to the beginning of the queue.

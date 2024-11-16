@@ -10,21 +10,20 @@ namespace s21{
 /**
  * @class Stack
  * @brief Stack is a container that works according to LIFO rule.
- * 
- * @details Stack is a container with elements organized according to 
- * LIFO (Last-In, First-Out) principle. A stack container class object 
- * contains pointers to the "head" of the stack; removing and adding elements 
- * is done strictly from the "head". You can think of the stack as a glass or 
- * a pipe with one sealed end: in order to get to the element placed in the container 
- * first, you must take out all the elements on top.
  */
 template <typename T>
 class Stack final{
 public:
     /**
-     * @brief Default constructor. Creates an empty data stack.
+     * @brief Creates an empty data stack.
      */
     Stack();
+
+    /**
+     * @brief List constructor. Sets the list values to the top of the stack.
+     * @param list std::initializar_list<T> data type.
+     */
+    Stack(const std::initializer_list<T>& list);
 
     Stack(const Stack& other) = delete;
     Stack(Stack&& other) noexcept = delete;

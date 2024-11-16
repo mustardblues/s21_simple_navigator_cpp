@@ -46,6 +46,14 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "any": "cpp",
+        "ctime": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "optional": "cpp",
+        "iomanip": "cpp",
+        "cinttypes": "cpp",
+        "variant": "cpp"
     }
 }
