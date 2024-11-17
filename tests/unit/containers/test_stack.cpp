@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "./../../../src/algorithms/containers/stack/stack.hpp"
+#include "./../../../src/containers/stack/stack.hpp"
 
 TEST(Stack, init){
     {

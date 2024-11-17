@@ -185,6 +185,14 @@ TEST(Graph, operators){
 TEST(Graph, begin){
     {
         // Arrange
+        s21::Graph graph;
+
+        // Assert
+        EXPECT_EQ(graph.begin(), nullptr);
+    }
+
+    {
+        // Arrange
         s21::Graph graph(1);
 
         graph(0, 0) = 1;
@@ -195,6 +203,14 @@ TEST(Graph, begin){
 }
 
 TEST(Graph, end){
+    {
+        // Arrange
+        s21::Graph graph;
+
+        // Assert
+        EXPECT_EQ(graph.end(), nullptr);
+    }
+
     {
         // Arrange
         s21::Graph graph(10);
@@ -212,7 +228,7 @@ TEST(Graph, loadGraphFromFile){
         s21::Graph graph(10);
 
         // Act
-        bool code = graph.loadGraphFromFile("no_exist.txt");
+        bool code = graph.loadGraphFromFile("");
 
         // Assert
         EXPECT_EQ(code, false);

@@ -8,8 +8,8 @@
 
 #include "./../graph/graph.hpp"
 
-#include "containers/queue/queue.hpp"
-#include "containers/stack/stack.hpp"
+#include "./../containers/queue/queue.hpp"
+#include "./../containers/stack/stack.hpp"
 
 namespace s21{
 

@@ -7,7 +7,8 @@ namespace s21{
 [[ nodiscard ]] std::deque<unsigned int> GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int start_vertex){
     std::deque<unsigned int> dist;
 
-    Stack<unsigned int> stack(start_vertex - 1);
+    Stack<unsigned int> stack;
+    stack.push(start_vertex - 1);
 
     std::vector<bool> visited(graph.length(), false);
     visited[start_vertex - 1] = true;

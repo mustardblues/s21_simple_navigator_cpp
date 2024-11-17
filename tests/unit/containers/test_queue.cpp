@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "./../../../src/algorithms/containers/queue/queue.hpp"
+#include "./../../../src/containers/queue/queue.hpp"
 
 TEST(Queue, init){
     {
