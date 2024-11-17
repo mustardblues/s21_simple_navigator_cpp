@@ -1,25 +1,25 @@
 # ------------------------------------------------------------------------------------------ Macros
 
-CXX												:= g++
-CXXFLAGS										:= -Wall -Wextra -Werror -pedantic -std=c++17 -g
-SYSFLAGS										:= -lgtest -lstdc++
+CXX									:= g++
+CXXFLAGS							:= -Wall -Wextra -Werror -pedantic -std=c++17 -g
+SYSFLAGS							:= -lgtest -lstdc++
 
 ifeq ($(shell uname), Linux)
-	SYSFLAGS									+= -pthread -lrt -lm
+	SYSFLAGS						+= -pthread -lrt -lm
 endif
 
-GRAPH_SOURCES 									:= src/graph/graph.cpp
-GRAPH_OBJECTS									:= graph.o
+GRAPH_SOURCES 						:= src/graph/graph.cpp
+GRAPH_OBJECTS						:= graph.o
 
-ALGORITMS_SOURCES								:= src/algorithms/algorithms.cpp
-ALGORITMS_OBJECTS								:= algorithms.o
+ALGORITMS_SOURCES					:= src/algorithms/algorithms.cpp
+ALGORITMS_OBJECTS					:= algorithms.o
 
-GRAPH_TEST_SOURCES								:= tests/unit/graph/test_graph.cpp
+GRAPH_TEST_SOURCES					:= tests/unit/graph/test_graph.cpp
 
-CONTAINERS_TEST_SOURCES							:= tests/unit/containers/test_queue.cpp \
-												   tests/unit/containers/test_stack.cpp
+CONTAINERS_TEST_SOURCES				:= tests/unit/containers/test_queue.cpp \
+									   tests/unit/containers/test_stack.cpp
 
-ALGORITMS_TEST_SOURCES							:= test/unit/algorithms/test_algorithms.cpp
+ALGORITMS_TEST_SOURCES				:= test/unit/algorithms/test_algorithms.cpp
 
 # ----------------------------------------------------------------------------------------- Targets
 
