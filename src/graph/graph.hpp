@@ -6,6 +6,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <filesystem>
+
 #include <string>
 
 namespace s21{
@@ -97,6 +99,26 @@ public:
     unsigned int operator () (const std::size_t row, const std::size_t col) const;
 
     /**
+     * @brief Provides access to graph without segmentation fault.
+     * @param pos Element index.
+     * @return Value stored in the graph.
+     */
+    unsigned int& operator () (const std::size_t pos) {
+        if(pos < capacity_) return data_[pos];
+
+        static unsigned int default_value{};
+
+        return default_value;
+    };
+
+    /**
+     * @brief Provides access to graph without segmentation fault.
+     * @param pos Element index.
+     * @return Value stored in the graph.
+     */
+    unsigned int operator () (const std::size_t pos) const { return pos < capacity_ ? data_[pos] : 0; };
+
+    /**
      * @brief Returns the number of vertices.
      */
     std::size_t length() const { return length_; }
@@ -109,7 +131,7 @@ public:
     /**
      * @brief Returns a constant last pointer from the graph.
      */
-    [[ nodiscard ]] unsigned int* end() { return data_ + length_ * length_; }
+    [[ nodiscard ]] unsigned int* end() { return data_ + capacity_; }
 
     /**
      * @brief Returns a constant first pointer from the graph.
@@ -119,14 +141,14 @@ public:
     /**
      * @brief Returns a constant last pointer from the graph.
      */
-    const unsigned int* end() const { return data_ + length_ * length_; }
+    const unsigned int* end() const { return data_ + capacity_; }
 
     /**
      * @brief Gets graph information from adjacency matrices.
      * @param filename The name of the file storing the adjacency matrices.
      * @return 0 if the load was in error, or 1 if the graph information was received.
      */
-    bool loadGraphFromFile(const std::string& filename);
+    bool loadGraphFromFile(const std::filesystem::path& filepath);
 
     /**
      * @brief Exports graph information to dot file.
@@ -134,7 +156,7 @@ public:
      * @return 0 if the export to dot file was invalid, or 1 if the export was successful.
      */
     template <GraphType T>
-    bool exportGraphToDot(const std::string& filename) const;
+    bool exportGraphToDot(const std::filesystem::path& filepath) const;
 
     /**
      * @brief Clears all data of the Graph class.
@@ -142,11 +164,8 @@ public:
     void clear() { this->~Graph(); }
 
 private:
-    inline std::string getFileContent(const std::string& filename);
-
-    inline std::string setValidFileName(const std::string& filename) const;
-    
     std::size_t length_;
+    std::size_t capacity_;
 
     unsigned int* data_;
 

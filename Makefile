@@ -36,6 +36,9 @@ help:
 install_doxygen: # installs Doxygen
 	sudo apt update && sudo apt-get doxygen
 
+build:
+	$(CXX) $(CXXFLAGS) $(GRAPH_SOURCES) $(ALGORITMS_SOURCES) main.cpp -o build
+
 # ------------------------------------------------------------------------------------------- Tests
 
 .PHONY: test
@@ -88,6 +91,7 @@ leaks: test # checks code for leaks using Valgrind utility
 # ------------------------------------------------------------------------------- Abstracts Targets
 
 clean:
+	- rm build
 	- rm test
 	- rm test_graph
 	- rm test_containers

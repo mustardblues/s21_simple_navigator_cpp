@@ -4,59 +4,53 @@
 
 namespace s21{
 
-Graph::Graph() : length_(0), data_(nullptr) {}
+Graph::Graph() : length_(0), capacity_(0), data_(nullptr) {}
 
-Graph::Graph(const std::size_t length) : length_(length), data_(new unsigned int[length_ * length_]{}) {}
+Graph::Graph(const std::size_t length) : length_(length), 
+                                        capacity_(length_ * length_), 
+                                        data_(new unsigned int[capacity_]{}) {}
 
 Graph::Graph(const std::string& filename) : Graph(){
     this->loadGraphFromFile(filename);
 }
 
-Graph::Graph(const Graph& other){
-    length_ = other.length_;
+Graph::Graph(const Graph& other) : Graph(){ *this = other; }
 
-    data_ = new unsigned int[length_ * length_]{};
-
-    std::copy(other.data_, other.data_ + length_ * length_, data_);
-}
-
-Graph::Graph(Graph&& other) noexcept{
-    std::swap(length_, other.length_);
-    std::swap(data_, other.data_);
-
-    other.length_ = 0;
-    other.data_ = nullptr;
-}
+Graph::Graph(Graph&& other) noexcept : Graph() { *this = std::move(other); }
 
 Graph::~Graph(){
     if(data_ == nullptr) return;
 
     delete[] data_;
 
-    data_ = nullptr;
-
     length_ = 0;
+    capacity_ = 0;
+    data_ = nullptr;
 }
 
 Graph& Graph::operator = (const Graph& other){
-    if(this != &other){
-        length_ = other.length_;
+    if(this == &other) return *this;
 
-        if(data_ != nullptr) delete[] data_;
+    length_ = other.length_;
 
-        data_ = new unsigned int[length_ * length_]{};
+    capacity_ = other.capacity_;
 
-        std::copy(other.data_, other.data_ + length_ * length_, data_);
-    }
+    if(data_ != nullptr) delete[] data_;
+
+    data_ = new unsigned int[capacity_]{};
+
+    std::copy(other.data_, other.data_ + capacity_, data_);
 
     return *this;
 }
 
 Graph& Graph::operator = (Graph&& other) noexcept{
     std::swap(length_, other.length_);
+    std::swap(capacity_, other.capacity_);
     std::swap(data_, other.data_);
 
     other.length_ = 0;
+    other.capacity_ = 0;
     other.data_ = nullptr;
 
     return *this;
@@ -80,135 +74,111 @@ unsigned int Graph::operator () (const std::size_t row, const std::size_t col) c
     return 0;
 }
 
-bool Graph::loadGraphFromFile(const std::string& filename){
-    std::stringstream stream(this->getFileContent(filename), std::ios::in);
+bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
+    if(!std::filesystem::exists(filepath.c_str())) return false;
 
-    Graph other;
-
-    stream >> other.length_;
-
-    if(stream.fail()) return false; 
-
-    other.data_ = new unsigned int[other.length_ * other.length_]{};
-
-    for(unsigned int i = 0, size = other.length_ * other.length_; i < size; ++i){
-        stream >> other.data_[i];
-
-        if(stream.fail()) return false;
-    }
-
-    if(data_ != nullptr) delete[] data_; 
-
-    length_ = other.length_;
-
-    data_ = new unsigned int[length_ * length_]{};
-
-    std::copy(other.begin(), other.end(), data_);
-
-    return true;
-}
-
-std::string Graph::getFileContent(const std::string& filename){
     std::string content;
 
-    std::fstream stream(filename, std::ios::in);
+    {
+        std::fstream f_stream(filepath.c_str(), std::ios::in);
 
-    if(stream.is_open()){
         std::stringstream buffer;
 
-        buffer << stream.rdbuf();
+        buffer << f_stream.rdbuf();
 
-        stream.close();
+        f_stream.close();
 
         content = buffer.str();
     }
 
-    return content;
-}
+    std::stringstream s_stream(content, std::ios::in);
 
-template <>
-bool Graph::exportGraphToDot<GraphType::Undirected>(const std::string& filename) const{
-    if(length_ == 0) return false;
+    s_stream >> length_;
 
-    std::string dot = this->setValidFileName(filename);
+    if(s_stream.fail() == true) return false;
 
-    std::fstream stream(dot, std::ios::out);
+    if(data_ != nullptr) delete[] data_;
 
-    std::string graphname(dot, 0, dot.size() - 4);
+    capacity_ = length_ * length_;
 
-    if(std::size_t pos = graphname.find_last_of('/'); pos != std::string::npos){
-        graphname.erase(0, pos + 1);
+    data_ = new unsigned int[capacity_]{};
+
+    for(unsigned int i = 0; i < capacity_; ++i){
+        s_stream >> *(data_ + i);
+
+        if(s_stream.fail() == true) return false;
     }
-
-    stream << "graph " << graphname << " {\n";
-
-    for(unsigned int i = 0; i < length_; ++i){
-        stream << "\t" << i + 1 << ";\n";
-    }
-
-    for(unsigned int i = 0; i < length_; ++i){
-        for(unsigned int j = i; j < length_; ++j){
-            if(data_[i * length_ + j] && data_[j * length_ + i]){
-                stream << "\t" << i + 1 << " -- " << j + 1 << ";\n";
-            }
-        }
-    }
-
-    stream << "}";
 
     return true;
 }
 
 template <>
-bool Graph::exportGraphToDot<GraphType::Directed>(const std::string& filename) const{
+bool Graph::exportGraphToDot<GraphType::Undirected>(const std::filesystem::path& filepath) const{
     if(length_ == 0) return false;
 
-    std::string dot = this->setValidFileName(filename);
+    std::filesystem::path f = filepath;
 
-    std::fstream stream(dot, std::ios::out);
-
-    std::string graphname(dot, 0, dot.size() - 4);
-
-    if(std::size_t pos = graphname.find_last_of('/'); pos != std::string::npos){
-        graphname.erase(0, pos + 1);
+    if(f.extension() != ".dot"){
+        f.replace_extension(std::filesystem::path(".dot"));
     }
 
-    stream << "digraph " << graphname << " {\n";
+    std::fstream f_stream(f.c_str(), std::ios::out);
+
+    if(f_stream.is_open() == false) return false;
+
+    f_stream << "graph graphname {\n";
 
     for(unsigned int i = 0; i < length_; ++i){
-        stream << "\t" << i + 1 << ";\n";
+        f_stream << "\t" << i + 1 << ";\n";
+    }
+
+    for(unsigned int i = 0; i < length_; ++i){
+        for(unsigned int j = i; j < length_; ++j){
+            if(data_[i * length_ + j] != 0 && data_[j * length_ + i] != 0){
+                f_stream << "\t" << i + 1 << " -- " << j + 1 << ";\n";
+            }
+        }
+    }
+
+    f_stream << "}";
+
+    return true;
+}
+
+template <>
+bool Graph::exportGraphToDot<GraphType::Directed>(const std::filesystem::path& filepath) const{
+    if(length_ == 0) return false;
+
+    std::filesystem::path f = filepath;
+
+    if(f.extension() != ".dot"){
+        f.replace_extension(std::filesystem::path(".dot"));
+    }
+
+    std::fstream f_stream(f.c_str(), std::ios::out);
+
+    if(f_stream.is_open() == false) return false;
+
+    f_stream << "digraph graphname {\n";
+
+    for(unsigned int i = 0; i < length_; ++i){
+        f_stream << "\t" << i + 1 << ";\n";
     }
 
     for(unsigned int i = 0; i < length_; ++i){
         for(unsigned int j = i; j < length_; ++j){
             if(data_[i * length_ + j]){
-                stream << "\t" << i + 1 << " -> " << j + 1 << ";\n";
+                f_stream << "\t" << i + 1 << " -> " << j + 1 << ";\n";
             }
             else if(data_[j * length_ + i]){
-                stream << "\t" << j + 1 << " -> " << i + 1 << ";\n";
+                f_stream << "\t" << j + 1 << " -> " << i + 1 << ";\n";
             }
         }
     }
 
-    stream << "}";
+    f_stream << "}";
 
     return true;
-}
-
-std::string Graph::setValidFileName(const std::string& filename) const{
-    if((filename.size() == 0) || (filename.find(" ", 0) != std::string::npos)){
-        return "graph.dot";
-    }
-
-    if(*(filename.end() - 1) == '/'){
-        return filename + "graph.dot";
-    }
-
-    if(filename.find(".dot", 0) == std::string::npos){
-        return filename + ".dot";
-    }
-
-    return filename;
 }
 
 } // namespace s21

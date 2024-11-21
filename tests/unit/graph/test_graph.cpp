@@ -244,7 +244,7 @@ TEST(Graph, loadGraphFromFile){
         s21::Graph graph_2(11);
 
         // Act
-        bool code = graph_2.loadGraphFromFile("tests/unit/files/adjacency_matrix.txt");
+        bool code = graph_2.loadGraphFromFile("tests/unit/adjacency_matrix.txt");
 
         // Assert
         EXPECT_EQ(code, true);
