@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <iterator>
 
 #include <filesystem>
 

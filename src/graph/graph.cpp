@@ -75,39 +75,27 @@ unsigned int Graph::operator () (const std::size_t row, const std::size_t col) c
 }
 
 bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
-    if(!std::filesystem::exists(filepath.c_str())) return false;
+    using namespace std;
 
-    std::string content;
+    if(!filesystem::exists(filepath.c_str())) return false;
 
-    {
-        std::fstream f_stream(filepath.c_str(), std::ios::in);
+    fstream f_stream(filepath, ios::in);
+    stringstream content;
+    content << f_stream.rdbuf();
+    f_stream.close();
 
-        std::stringstream buffer;
-
-        buffer << f_stream.rdbuf();
-
-        f_stream.close();
-
-        content = buffer.str();
-    }
-
-    std::stringstream s_stream(content, std::ios::in);
+    stringstream s_stream(content.str(), ios::in);
 
     s_stream >> length_;
 
-    if(s_stream.fail() == true) return false;
-
-    if(data_ != nullptr) delete[] data_;
+    if(s_stream.fail()) return false;
 
     capacity_ = length_ * length_;
-
+    
+    if(data_ != nullptr) delete[] data_;
     data_ = new unsigned int[capacity_]{};
 
-    for(unsigned int i = 0; i < capacity_; ++i){
-        s_stream >> *(data_ + i);
-
-        if(s_stream.fail() == true) return false;
-    }
+    copy(istream_iterator<unsigned int>(s_stream), istream_iterator<unsigned int>(), data_);
 
     return true;
 }
@@ -122,9 +110,7 @@ bool Graph::exportGraphToDot<GraphType::Undirected>(const std::filesystem::path&
         f.replace_extension(std::filesystem::path(".dot"));
     }
 
-    std::fstream f_stream(f.c_str(), std::ios::out);
-
-    if(f_stream.is_open() == false) return false;
+    std::fstream f_stream(f, std::ios::out);
 
     f_stream << "graph graphname {\n";
 
@@ -155,9 +141,7 @@ bool Graph::exportGraphToDot<GraphType::Directed>(const std::filesystem::path& f
         f.replace_extension(std::filesystem::path(".dot"));
     }
 
-    std::fstream f_stream(f.c_str(), std::ios::out);
-
-    if(f_stream.is_open() == false) return false;
+    std::fstream f_stream(f, std::ios::out);
 
     f_stream << "digraph graphname {\n";
 
@@ -167,10 +151,10 @@ bool Graph::exportGraphToDot<GraphType::Directed>(const std::filesystem::path& f
 
     for(unsigned int i = 0; i < length_; ++i){
         for(unsigned int j = i; j < length_; ++j){
-            if(data_[i * length_ + j]){
+            if(data_[i * length_ + j] != 0){
                 f_stream << "\t" << i + 1 << " -> " << j + 1 << ";\n";
             }
-            else if(data_[j * length_ + i]){
+            else if(data_[j * length_ + i] != 0){
                 f_stream << "\t" << j + 1 << " -> " << i + 1 << ";\n";
             }
         }
