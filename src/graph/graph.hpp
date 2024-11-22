@@ -3,13 +3,11 @@
 #ifndef _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 #define _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 
+#include <string>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <iterator>
-
-#include <filesystem>
-
-#include <string>
 
 namespace s21{
 

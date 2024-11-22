@@ -86,14 +86,20 @@ bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
 
     stringstream s_stream(content.str(), ios::in);
 
-    s_stream >> length_;
+    std::size_t new_length{};
+    s_stream >> new_length;
 
     if(s_stream.fail()) return false;
-
-    capacity_ = length_ * length_;
     
-    if(data_ != nullptr) delete[] data_;
-    data_ = new unsigned int[capacity_]{};
+    if(length_ != new_length && data_ != nullptr){
+        length_ = new_length;
+
+        capacity_ = length_ * length_;
+
+        delete[] data_;
+
+        data_ = new unsigned int[capacity_]{};
+    }
 
     copy(istream_iterator<unsigned int>(s_stream), istream_iterator<unsigned int>(), data_);
 

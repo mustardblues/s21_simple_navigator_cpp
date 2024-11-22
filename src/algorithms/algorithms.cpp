@@ -27,8 +27,6 @@ namespace s21{
         }
     }
 
-    std::filesystem::path path;
-
     return dist;
 }
 
