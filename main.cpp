@@ -1,26 +1,17 @@
 #include <iostream>
 
-#include "src/graph/graph.hpp"
-#include "src/algorithms/algorithms.hpp"
+#include "src/containers/priority_queue/priority_queue.hpp"
 
 int main(void){
-    s21::Graph graph;
+    s21::PriorityQueue<int> queue{8, 12, 5, 6, 11, 9, 1, 0};
 
-    graph.loadGraphFromFile("sample.txt");
+    // std::cout << queue.size() << std::endl;
 
-    std::cout << graph.length() << std::endl;
-
-    for(unsigned int i = 0; i < 4; ++i){
-        for(unsigned int j = 0; j < 4; ++j){
-            std::cout << graph(i, j) << " ";
-        }
-
-        std::cout << std::endl;
+    for(unsigned int i = 0; i < 8; ++i){
+        std::cout << queue.pop() << " ";
     }
 
-    std::filesystem::path path = "asd";
-
-    graph.exportGraphToDot<s21::GraphType::Undirected>(path);
+    std::cout << std::endl;
 
     return 0;
 }   

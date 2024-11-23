@@ -59,6 +59,8 @@ namespace s21{
 [[ nodiscard ]] Graph GraphAlgorithms::getLeastSpanningTree(const Graph& graph){
     Graph tree(graph.length());
 
+    
+
     return tree;
 }
 

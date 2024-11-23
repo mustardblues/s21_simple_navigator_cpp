@@ -19,10 +19,10 @@ template <typename T>
 Queue<T>::~Queue(){
     if(size_ == 0) return;
 
-    while(tail_ != nullptr){
-        Node<T>* node = tail_;
+    while(head_ != nullptr){
+        Node<T>* node = head_;
 
-        tail_ = tail_->prev_;
+        head_ = head_->next_;
 
         delete node;
     }
@@ -45,9 +45,7 @@ void Queue<T>::push(const T& value){
     }
     else{
         node->prev_ = tail_;
-
         tail_->next_ = node;
-
         tail_ = node;
     }
 

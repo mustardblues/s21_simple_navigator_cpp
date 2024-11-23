@@ -12,7 +12,7 @@ namespace s21{
  * @brief Queue is a container that works according to FIFO rule.
  */
 template <typename T>
-class Queue final{
+class Queue{
 public:
     /**
      * @brief Creates an empty data queue.
@@ -31,7 +31,7 @@ public:
     /**
      * @brief Destructor. Clears all queue data.
      */
-    ~Queue();
+    virtual ~Queue();
 
     Queue& operator = (const Queue& other) = delete;
     Queue& operator = (Queue&& other) = delete;
@@ -60,7 +60,7 @@ public:
     /**
      * @brief Adds a value to the beginning of the queue.
      */
-    void push(const T& value);
+    virtual void push(const T& value);
 
     /**
      * @brief Deletes value from the beginning of the queue.
@@ -73,7 +73,7 @@ public:
      */
     void clear();
 
-private:
+protected:
     std::size_t size_;
 
     Node<T>* head_;
