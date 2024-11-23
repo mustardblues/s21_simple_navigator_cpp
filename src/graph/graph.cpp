@@ -75,16 +75,14 @@ unsigned int Graph::operator () (const std::size_t row, const std::size_t col) c
 }
 
 bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
-    using namespace std;
+    if(!std::filesystem::exists(filepath.c_str())) return false;
 
-    if(!filesystem::exists(filepath.c_str())) return false;
-
-    fstream f_stream(filepath, ios::in);
-    stringstream content;
+    std::fstream f_stream(filepath, std::ios::in);
+    std::stringstream content;
     content << f_stream.rdbuf();
     f_stream.close();
 
-    stringstream s_stream(content.str(), ios::in);
+    std::stringstream s_stream(content.str(), std::ios::in);
 
     std::size_t new_length{};
     s_stream >> new_length;
@@ -101,7 +99,7 @@ bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
         data_ = new unsigned int[capacity_]{};
     }
 
-    copy(istream_iterator<unsigned int>(s_stream), istream_iterator<unsigned int>(), data_);
+    std::copy(std::istream_iterator<unsigned int>(s_stream), std::istream_iterator<unsigned int>(), data_);
 
     return true;
 }
@@ -118,7 +116,10 @@ bool Graph::exportGraphToDot<GraphType::Undirected>(const std::filesystem::path&
 
     std::fstream f_stream(f, std::ios::out);
 
-    f_stream << "graph graphname {\n";
+    std::string graphname(f.stem());
+    graphname.erase(std::remove(graphname.begin(), graphname.end(), '\"'), graphname.end());
+    
+    f_stream << "graph " <<  graphname << "{\n";
 
     for(unsigned int i = 0; i < length_; ++i){
         f_stream << "\t" << i + 1 << ";\n";
@@ -149,7 +150,10 @@ bool Graph::exportGraphToDot<GraphType::Directed>(const std::filesystem::path& f
 
     std::fstream f_stream(f, std::ios::out);
 
-    f_stream << "digraph graphname {\n";
+    std::string graphname(f.stem());
+    graphname.erase(std::remove(graphname.begin(), graphname.end(), '\"'), graphname.end());
+
+    f_stream << "digraph " <<  graphname << "{\n";
 
     for(unsigned int i = 0; i < length_; ++i){
         f_stream << "\t" << i + 1 << ";\n";

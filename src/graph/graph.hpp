@@ -3,6 +3,7 @@
 #ifndef _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 #define _A2_SIMPLE_NAVIGATOR_SRC_GRAPH_GRAPH_HPP_
 
+#include <algorithm>
 #include <string>
 #include <filesystem>
 #include <fstream>

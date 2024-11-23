@@ -244,7 +244,7 @@ TEST(Graph, loadGraphFromFile){
         s21::Graph graph_2(11);
 
         // Act
-        bool code = graph_2.loadGraphFromFile("tests/unit/adjacency_matrix.txt");
+        bool code = graph_2.loadGraphFromFile("tests/unit/graph/adjacency_matrix.txt");
 
         // Assert
         EXPECT_EQ(code, true);
@@ -258,7 +258,7 @@ TEST(Graph, exportGraphToDot){
         s21::Graph graph;
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("");
+        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("graph");
 
         // Assert
         EXPECT_EQ(code, false);
@@ -271,7 +271,7 @@ TEST(Graph, exportGraphToDot){
         std::copy(list.begin(), list.end(), graph.begin());
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("");
+        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("graph");
 
         // Assert
         EXPECT_EQ(code, true);
@@ -282,7 +282,7 @@ TEST(Graph, exportGraphToDot){
         s21::Graph graph;
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("");
+        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("graph");
 
         // Assert
         EXPECT_EQ(code, false);
@@ -295,7 +295,7 @@ TEST(Graph, exportGraphToDot){
         std::copy(list.begin(), list.end(), graph.begin());
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("");
+        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("graph");
 
         // Assert
         EXPECT_EQ(code, true);
