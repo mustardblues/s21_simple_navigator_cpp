@@ -1,6 +1,7 @@
 // Copyright 2024 stranger
 
 #include <gtest/gtest.h>
+#include <filesystem>
 
 #include "./../../../src/graph/graph.hpp"
 
@@ -258,7 +259,7 @@ TEST(Graph, exportGraphToDot){
         s21::Graph graph;
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("graph");
+        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("");
 
         // Assert
         EXPECT_EQ(code, false);
@@ -270,11 +271,16 @@ TEST(Graph, exportGraphToDot){
 
         std::copy(list.begin(), list.end(), graph.begin());
 
+        std::filesystem::path filepath("graph.dot");
+
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("graph");
+        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>(filepath);
 
         // Assert
+        EXPECT_EQ(std::filesystem::exists(filepath), true);
         EXPECT_EQ(code, true);
+
+        std::filesystem::remove(filepath);
     }
 
     {
@@ -282,7 +288,7 @@ TEST(Graph, exportGraphToDot){
         s21::Graph graph;
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("graph");
+        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("");
 
         // Assert
         EXPECT_EQ(code, false);
@@ -294,10 +300,15 @@ TEST(Graph, exportGraphToDot){
 
         std::copy(list.begin(), list.end(), graph.begin());
 
+        std::filesystem::path filepath("graph.dot");
+
         // Act
         bool code = graph.exportGraphToDot<s21::GraphType::Directed>("graph");
 
         // Assert
+        EXPECT_EQ(std::filesystem::exists(filepath), true);
         EXPECT_EQ(code, true);
+
+        std::filesystem::remove(filepath);
     }
 }
