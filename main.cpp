@@ -1,17 +1,23 @@
 #include <iostream>
 
+#include "src/algorithms/algorithms.hpp"
+
 #include "src/containers/priority_queue/priority_queue.hpp"
 
 int main(void){
-    s21::PriorityQueue<int> queue{8, 12, 5, 6, 11, 9, 1, 0};
+    s21::Graph graph("data.txt");
 
-    // std::cout << queue.size() << std::endl;
+    s21::Graph tree = s21::GraphAlgorithms::getLeastSpanningTree(graph);
 
-    for(unsigned int i = 0; i < 8; ++i){
-        std::cout << queue.pop() << " ";
+    for(unsigned int i = 0; i < tree.length(); ++i){
+        for(unsigned int j = 0; j < tree.length(); ++j){
+            std::cout << tree(i, j) << " ";
+        }
+
+        std::cout << std::endl;
     }
 
-    std::cout << std::endl;
+    // tree.exportGraphToDot<s21::GraphType::Undirected>("pic.dot");
 
     return 0;
 }   

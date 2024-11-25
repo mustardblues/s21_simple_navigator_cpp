@@ -10,8 +10,8 @@ Graph::Graph(const std::size_t length) : length_(length),
                                         capacity_(length_ * length_), 
                                         data_(new unsigned int[capacity_]{}) {}
 
-Graph::Graph(const std::string& filename) : Graph(){
-    this->loadGraphFromFile(filename);
+Graph::Graph(const std::filesystem::path& filepath) : Graph(){
+    this->loadGraphFromFile(filepath);
 }
 
 Graph::Graph(const Graph& other) : Graph(){ *this = other; }
@@ -89,12 +89,12 @@ bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
 
     if(s_stream.fail()) return false;
     
-    if(length_ != new_length && data_ != nullptr){
+    if(length_ != new_length){
         length_ = new_length;
 
         capacity_ = length_ * length_;
 
-        delete[] data_;
+        if(data_ != nullptr) delete[] data_;
 
         data_ = new unsigned int[capacity_]{};
     }

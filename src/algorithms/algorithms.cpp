@@ -1,6 +1,7 @@
 // Copyright 2024 stranger
 
 #include "algorithms.hpp"
+#include <iostream>
 
 namespace s21{
 
@@ -10,7 +11,9 @@ namespace s21{
     Stack<unsigned int> stack;
     stack.push(start_vertex - 1);
 
-    std::vector<bool> visited(graph.length(), false);
+    std::size_t length = graph.length();
+
+    std::vector<bool> visited(length, false);
     visited[start_vertex - 1] = true;
 
     while(!stack.empty()){
@@ -18,7 +21,7 @@ namespace s21{
 
         dist.emplace_back(vertex + 1);
 
-        for(unsigned int i = 0; i < graph.length(); ++i){
+        for(unsigned int i = 0; i < length; ++i){
             if(graph(vertex, i) != 0 && visited[i] == false){
                 stack.push(i);
 
@@ -36,7 +39,9 @@ namespace s21{
     Queue<unsigned int> queue;
     queue.push(start_vertex - 1);
 
-    std::vector<bool> visited(graph.length(), false);
+    std::size_t length = graph.length();
+
+    std::vector<bool> visited(length, false);
     visited[start_vertex - 1] = true;
 
     while(!queue.empty()){
@@ -44,7 +49,7 @@ namespace s21{
 
         dist.emplace_back(vertex + 1);
 
-        for(unsigned int i = 0; i < graph.length(); ++i){
+        for(unsigned int i = 0; i < length; ++i){
             if(graph(vertex, i) != 0 && visited[i] == false){
                 queue.push(i);
 
@@ -57,9 +62,30 @@ namespace s21{
 }
 
 [[ nodiscard ]] Graph GraphAlgorithms::getLeastSpanningTree(const Graph& graph){
-    Graph tree(graph.length());
+    std::size_t length = graph.length();
 
-    
+    Graph tree(length);
+
+    PriorityQueue<EdgeWeight> queue;
+    queue.push({0, 0, 0});
+
+    std::vector<bool> visited(length, false);
+
+    while(!queue.empty()){
+        auto [weight, row, col] = queue.pop();
+
+        if(!visited[col]){
+            tree(row, col) = tree(col, row) = weight;
+
+            visited[col] = true;
+
+            for(unsigned int i = 0; i < length; ++i){
+                if(!visited[i] && graph(col, i) != 0) queue.push({graph(col, i), col, i});
+            }
+        }
+    }
+
+    std::cout << "size: " << queue.size() << std::endl;
 
     return tree;
 }

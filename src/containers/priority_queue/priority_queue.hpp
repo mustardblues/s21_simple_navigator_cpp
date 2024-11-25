@@ -15,6 +15,11 @@ template <typename T>
 class PriorityQueue final : public Queue<T>{
 public:
     /**
+     * @brief Creates an empty data queue.
+     */
+    PriorityQueue() : Queue<T>(){}
+
+    /**
      * @brief List constructor. Sets the list values in a queue in order.
      * @param list std::initializar_list<T> data type.
      */
@@ -38,12 +43,12 @@ public:
             Queue<T>::head_ = node;
             Queue<T>::tail_ = node;
         }
-        else if(node->value_ < Queue<T>::head_->value_){
+        else if(node->value_ <= Queue<T>::head_->value_){
             node->next_ = Queue<T>::head_;
             Queue<T>::head_->prev_ = node;
             Queue<T>::head_ = node;
         }
-        else if(node->value_ > Queue<T>::tail_->value_){
+        else if(node->value_ >= Queue<T>::tail_->value_){
             node->prev_ = Queue<T>::tail_;
             Queue<T>::tail_->next_ = node;
             Queue<T>::tail_ = node;

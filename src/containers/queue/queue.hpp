@@ -40,7 +40,7 @@ public:
      * @brief Provides information about queue's fullness.
      * @return 0 if the queue is fill and 1 if the queue is empty.
      */
-    bool empty() const { return size_ != 0 ? false : true; }
+    bool empty() const { return size_ == 0; }
 
     /**
      * @brief Accesses to queue size.

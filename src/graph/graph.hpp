@@ -43,7 +43,7 @@ public:
     /**
      * @brief Loads the adjacency matrix from a file.
      */
-    Graph(const std::string& filename);
+    Graph(const std::filesystem::path& filepath);
 
     /**
      * @brief Copies data from another object from Graph class.

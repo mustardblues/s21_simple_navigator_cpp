@@ -11,7 +11,54 @@
 #include "./../containers/queue/queue.hpp"
 #include "./../containers/stack/stack.hpp"
 
+#include "./../containers/priority_queue/priority_queue.hpp"
+
 namespace s21{
+
+/**
+ * @struct EdgeWeight
+ * @brief Contains information about weights of graph between vertices.
+ */
+struct EdgeWeight final{
+    /**
+     * @brief Weights between graph vertices.
+     */
+    unsigned int weight_;
+
+    /**
+     * @brief Row of weight element.
+     */
+    unsigned int row_;
+
+    /**
+     * @brief Column of weight element.
+     */
+    unsigned int column_;
+
+    constexpr bool operator == (const EdgeWeight& other) const{
+        return weight_ == other.weight_;
+    }
+
+    constexpr bool operator != (const EdgeWeight& other) const{
+        return weight_ == other.weight_;
+    }
+
+    constexpr bool operator < (const EdgeWeight& other) const{
+        return weight_ < other.weight_;
+    }
+
+    constexpr bool operator > (const EdgeWeight& other) const{
+        return weight_ > other.weight_;
+    }
+
+    constexpr bool operator <= (const EdgeWeight& other) const{
+        return weight_ <= other.weight_;
+    }
+
+    constexpr bool operator >= (const EdgeWeight& other) const{
+        return weight_ >= other.weight_;
+    }
+};
 
 class GraphAlgorithms final{
 public:

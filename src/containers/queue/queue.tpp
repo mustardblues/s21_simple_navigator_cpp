@@ -3,6 +3,8 @@
 #ifndef _A2_SIMPLE_NAVIGATOR_SRC_CONTAINERS_QUEUE_TPP_
 #define _A2_SIMPLE_NAVIGATOR_SRC_CONTAINERS_QUEUE_TPP_
 
+#include <iostream>
+
 namespace s21{
 
 template <typename T>
