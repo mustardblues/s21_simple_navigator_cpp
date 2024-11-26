@@ -88,7 +88,7 @@ public:
      * @param col Column element index.
      * @return Element reference from graph.
      */
-    [[ nodiscard ]] unsigned int& operator () (const std::size_t row, const std::size_t col);
+    [[ nodiscard ]] int& operator () (const std::size_t row, const std::size_t col);
 
     /**
      * @brief Provides access to graph without segmentation fault.
@@ -96,17 +96,17 @@ public:
      * @param col Column element index.
      * @return Value stored in the graph.
      */
-    unsigned int operator () (const std::size_t row, const std::size_t col) const;
+    int operator () (const std::size_t row, const std::size_t col) const;
 
     /**
      * @brief Provides access to graph without segmentation fault.
      * @param pos Element index.
      * @return Value stored in the graph.
      */
-    unsigned int& operator () (const std::size_t pos) {
+    int& operator () (const std::size_t pos) {
         if(pos < capacity_) return data_[pos];
 
-        static unsigned int default_value{};
+        static int default_value{};
 
         return default_value;
     };
@@ -116,7 +116,7 @@ public:
      * @param pos Element index.
      * @return Value stored in the graph.
      */
-    unsigned int operator () (const std::size_t pos) const { return pos < capacity_ ? data_[pos] : 0; };
+    int operator () (const std::size_t pos) const { return pos < capacity_ ? data_[pos] : 0; };
 
     /**
      * @brief Returns the number of vertices.
@@ -124,24 +124,29 @@ public:
     std::size_t length() const { return length_; }
 
     /**
-     * @brief Returns a constant first pointer from the graph.
+     * @brief Returns the size of adjacency matrix.
      */
-    [[ nodiscard ]] unsigned int* begin() { return data_; }
-
-    /**
-     * @brief Returns a constant last pointer from the graph.
-     */
-    [[ nodiscard ]] unsigned int* end() { return data_ + capacity_; }
+    std::size_t capacity() const { return capacity_; }
 
     /**
      * @brief Returns a constant first pointer from the graph.
      */
-    const unsigned int* begin() const { return data_; }
+    [[ nodiscard ]] int* begin() { return data_; }
 
     /**
      * @brief Returns a constant last pointer from the graph.
      */
-    const unsigned int* end() const { return data_ + capacity_; }
+    [[ nodiscard ]] int* end() { return data_ + capacity_; }
+
+    /**
+     * @brief Returns a constant first pointer from the graph.
+     */
+    const int* begin() const { return data_; }
+
+    /**
+     * @brief Returns a constant last pointer from the graph.
+     */
+    const int* end() const { return data_ + capacity_; }
 
     /**
      * @brief Gets graph information from adjacency matrices.
@@ -167,7 +172,7 @@ private:
     std::size_t length_;
     std::size_t capacity_;
 
-    unsigned int* data_;
+    int* data_;
 
 };
 

@@ -8,7 +8,7 @@ namespace s21{
 auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
     std::deque<unsigned int> dist;
 
-    std::size_t length = graph.length();
+    const std::size_t length = graph.length();
 
     Stack<unsigned int> stack;
     stack.push(start_vertex - 1);
@@ -36,7 +36,7 @@ auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int st
 auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
     std::deque<unsigned int> dist;
 
-    std::size_t length = graph.length();
+    const std::size_t length = graph.length();
 
     Queue<unsigned int> queue;
     queue.push(start_vertex - 1);
@@ -62,14 +62,14 @@ auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int 
 }
 
 int GraphAlgorithms::getShortestPathBetweenVertices(const Graph &graph, const unsigned int begin, const unsigned int end){
-    std::size_t length = graph.length();
+    const std::size_t length = graph.length();
 
     PriorityQueue<std::pair<unsigned int, unsigned int>> queue;
     queue.push({begin - 1, 0});
 
     std::vector<bool> visited(length, false);
 
-    std::vector<unsigned int> dist(length, -1);
+    std::vector<unsigned int> dist(length, static_cast<unsigned int>(s21::Constants::inf));
     dist[0] = 0;
 
     while(!queue.empty()){
@@ -95,12 +95,40 @@ int GraphAlgorithms::getShortestPathBetweenVertices(const Graph &graph, const un
     return 0;
 }
 
-// Graph GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph){
-    
-// }
+Graph GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph){
+    const std::size_t length = graph.length();
+
+    Graph matrix(length);
+    const std::size_t capacity = matrix.capacity()
+    const int infinity = static_cast<int>(Constants::inf);
+    // O(N)
+    for(unsigned int i = 0; i < capacity; ++i){
+        matrix(i) = infinity;
+
+        if(graph(i) != 0) matrix(i) = graph(i);
+    }
+    // O(logN)
+    for(unsigned int i = 0; i < capacity; i += length + 1){
+        matrix(i) = 0;
+    }
+
+    for(unsigned int k = 0; k < length; ++k){
+        for(unsigned int i = 0; i < length; ++i){
+            for(unsigned int j = 0; j < length; ++j){
+                if(matrix(i, k) != infinity && matrix(k, j) != infinity){
+                    int weight = matrix(i, k) + matrix(k, j);
+
+                    if(matrix(i, j) > weight) matrix(i, j) = weight;
+                }
+            }
+        }
+    }
+
+    return matrix;
+}
 
 Graph GraphAlgorithms::getLeastSpanningTree(const Graph& graph){
-    std::size_t length = graph.length();
+    const std::size_t length = graph.length();
 
     Graph tree(length);
 

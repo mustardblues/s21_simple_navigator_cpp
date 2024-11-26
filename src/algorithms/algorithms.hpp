@@ -5,6 +5,7 @@
 
 #include <deque>
 #include <vector>
+#include <limits>
 
 #include "./../graph/graph.hpp"
 
@@ -12,6 +13,12 @@
 #include "./../containers/stack/stack.hpp"
 
 #include "./../containers/priority_queue/priority_queue.hpp"
+
+namespace s21::Constants{
+
+inline constexpr float inf = std::numeric_limits<float>::max();
+
+} // namespace s21::constants
 
 namespace s21{
 
@@ -23,7 +30,7 @@ struct EdgeWeight final{
     /**
      * @brief Weights between graph vertices.
      */
-    unsigned int weight_;
+    int weight_;
 
     /**
      * @brief Row of weight element.
@@ -98,7 +105,7 @@ public:
     /**
      * @brief Floyd–Warshall algorithm algorithm for finding the shortest path in graph between all vertices.
      * @param graph Contains information about the vertices and edges of the graph.
-     * @return A numerical result equal to the smallest distance between begin and last parameters.
+     * @return 
      */
     static Graph getShortestPathsBetweenAllVertices(Graph &graph);
 

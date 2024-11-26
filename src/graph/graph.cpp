@@ -8,7 +8,7 @@ Graph::Graph() : length_(0), capacity_(0), data_(nullptr) {}
 
 Graph::Graph(const std::size_t length) : length_(length), 
                                         capacity_(length_ * length_), 
-                                        data_(new unsigned int[capacity_]{}) {}
+                                        data_(new int[capacity_]{}) {}
 
 Graph::Graph(const std::filesystem::path& filepath) : Graph(){
     this->loadGraphFromFile(filepath);
@@ -37,7 +37,7 @@ Graph& Graph::operator = (const Graph& other){
 
     if(data_ != nullptr) delete[] data_;
 
-    data_ = new unsigned int[capacity_]{};
+    data_ = new int[capacity_]{};
 
     std::copy(other.data_, other.data_ + capacity_, data_);
 
@@ -56,17 +56,17 @@ Graph& Graph::operator = (Graph&& other) noexcept{
     return *this;
 }
 
-[[ nodiscard ]] unsigned int& Graph::operator () (const std::size_t row, const std::size_t col){
+[[ nodiscard ]] int& Graph::operator () (const std::size_t row, const std::size_t col){
     if(row < length_ && col < length_){
         return *(data_ + (row * length_ + col));
     }
 
-    static unsigned int default_value{0};
+    static int default_value{0};
 
     return default_value;
 }
 
-unsigned int Graph::operator () (const std::size_t row, const std::size_t col) const{
+int Graph::operator () (const std::size_t row, const std::size_t col) const{
     if(row < length_ && col < length_){
         return *(data_ + (row * length_ + col));
     }
@@ -96,7 +96,7 @@ bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
 
         if(data_ != nullptr) delete[] data_;
 
-        data_ = new unsigned int[capacity_]{};
+        data_ = new int[capacity_]{};
     }
 
     std::copy(std::istream_iterator<unsigned int>(s_stream), std::istream_iterator<unsigned int>(), data_);

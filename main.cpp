@@ -4,11 +4,11 @@
 #include "src/containers/priority_queue/priority_queue.hpp"
 
 int main(void){
-    s21::Graph graph("test.txt");
+    // s21::Graph graph("test.txt");
 
-    using A = s21::GraphAlgorithms;
+    // using A = s21::GraphAlgorithms;
 
-    std::cout << A::getShortestPathBetweenVertices(graph, 1, 5) << std::endl;
+    // std::cout << A::getShortestPathBetweenVertices(graph, 1, 5) << std::endl;
 
     // s21::Graph tree = s21::GraphAlgorithms::getLeastSpanningTree(graph);
 
@@ -19,6 +19,10 @@ int main(void){
 
     //     std::cout << std::endl;
     // }
+
+    std::cout << static_cast<int>(s21::Constants::inf) << std::endl;
+
+    // delete[] array;
 
     return 0;
 }   
