@@ -107,14 +107,14 @@ public:
      * @param graph Contains information about the vertices and edges of the graph.
      * @return 
      */
-    static Graph getShortestPathsBetweenAllVertices(Graph &graph);
+    static auto getShortestPathsBetweenAllVertices(Graph &graph) -> Matrix<int>;
 
     /**
      * @brief Prim's algorithm for finding minimum spanning tree.
      * @param graph Contains information about the vertices and edges of the graph.
      * @return The object of Graph class with the adjacency matrix for the minimal spanning tree.
      */
-    static Graph getLeastSpanningTree(const Graph& graph);
+    static auto getLeastSpanningTree(const Graph& graph) -> Matrix<int>;
 };
 
 } // namespace s21

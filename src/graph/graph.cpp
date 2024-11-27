@@ -4,130 +4,72 @@
 
 namespace s21{
 
-Graph::Graph() : length_(0), capacity_(0), data_(nullptr) {}
+Graph::Graph() : vertices_(0) {}
 
-Graph::Graph(const std::size_t length) : length_(length), 
-                                        capacity_(length_ * length_), 
-                                        data_(new int[capacity_]{}) {}
+Graph::Graph(const std::size_t vertices) : vertices_(vertices), matrix_(vertices_, vertices_) {}
 
-Graph::Graph(const std::filesystem::path& filepath) : Graph(){
-    this->loadGraphFromFile(filepath);
+Graph::Graph(const std::filesystem::path& path){ this->loadGraphFromFile(path); }
+
+Graph::Graph(const Graph& other){
+    vertices_ = other.vertices_;
+    matrix_ = other.matrix_;
 }
 
-Graph::Graph(const Graph& other) : Graph(){ *this = other; }
+Graph::Graph(Graph&& other) noexcept{
+    vertices_ = other.vertices_;
+    matrix_ = std::move(other.matrix_);
 
-Graph::Graph(Graph&& other) noexcept : Graph() { *this = std::move(other); }
-
-Graph::~Graph(){
-    if(data_ == nullptr) return;
-
-    delete[] data_;
-
-    length_ = 0;
-    capacity_ = 0;
-    data_ = nullptr;
+    other.vertices_ = 0;
 }
 
-Graph& Graph::operator = (const Graph& other){
-    if(this == &other) return *this;
+bool Graph::loadGraphFromFile(const std::filesystem::path& path){
+    if(!std::filesystem::exists(path.c_str())) return false;
 
-    length_ = other.length_;
-
-    capacity_ = other.capacity_;
-
-    if(data_ != nullptr) delete[] data_;
-
-    data_ = new int[capacity_]{};
-
-    std::copy(other.data_, other.data_ + capacity_, data_);
-
-    return *this;
-}
-
-Graph& Graph::operator = (Graph&& other) noexcept{
-    std::swap(length_, other.length_);
-    std::swap(capacity_, other.capacity_);
-    std::swap(data_, other.data_);
-
-    other.length_ = 0;
-    other.capacity_ = 0;
-    other.data_ = nullptr;
-
-    return *this;
-}
-
-[[ nodiscard ]] int& Graph::operator () (const std::size_t row, const std::size_t col){
-    if(row < length_ && col < length_){
-        return *(data_ + (row * length_ + col));
-    }
-
-    static int default_value{0};
-
-    return default_value;
-}
-
-int Graph::operator () (const std::size_t row, const std::size_t col) const{
-    if(row < length_ && col < length_){
-        return *(data_ + (row * length_ + col));
-    }
-
-    return 0;
-}
-
-bool Graph::loadGraphFromFile(const std::filesystem::path& filepath){
-    if(!std::filesystem::exists(filepath.c_str())) return false;
-
-    std::fstream f_stream(filepath, std::ios::in);
+    std::fstream f_stream(path, std::ios::in);
     std::stringstream content;
     content << f_stream.rdbuf();
     f_stream.close();
 
     std::stringstream s_stream(content.str(), std::ios::in);
 
-    std::size_t new_length{};
-    s_stream >> new_length;
+    std::size_t v{};
+    s_stream >> v;
 
     if(s_stream.fail()) return false;
-    
-    if(length_ != new_length){
-        length_ = new_length;
 
-        capacity_ = length_ * length_;
+    vertices_ = v;
 
-        if(data_ != nullptr) delete[] data_;
+    Matrix<int> temp(vertices_, vertices_);
 
-        data_ = new int[capacity_]{};
-    }
+    std::copy(std::istream_iterator<unsigned int>(s_stream), std::istream_iterator<unsigned int>(), temp.begin());
 
-    std::copy(std::istream_iterator<unsigned int>(s_stream), std::istream_iterator<unsigned int>(), data_);
+    matrix_ = std::move(temp);
 
     return true;
 }
 
 template <>
-bool Graph::exportGraphToDot<GraphType::Undirected>(const std::filesystem::path& filepath) const{
-    if(length_ == 0) return false;
+bool Graph::exportGraphToDot<GraphType::Undirected>(const std::filesystem::path& path) const{
+    if(vertices_ == 0) return false;
 
-    std::filesystem::path f = filepath;
+    std::filesystem::path filename = path;
 
-    if(f.extension() != ".dot"){
-        f.replace_extension(std::filesystem::path(".dot"));
-    }
+    if(filename.extension() != ".dot") filename.replace_extension(std::filesystem::path(".dot"));
 
-    std::fstream f_stream(f, std::ios::out);
+    std::fstream f_stream(filename, std::ios::out);
 
-    std::string graphname(f.stem());
+    std::string graphname(filename.stem());
     graphname.erase(std::remove(graphname.begin(), graphname.end(), '\"'), graphname.end());
     
     f_stream << "graph " <<  graphname << "{\n";
 
-    for(unsigned int i = 0; i < length_; ++i){
+    for(unsigned int i = 0; i < vertices_; ++i){
         f_stream << "\t" << i + 1 << ";\n";
     }
 
-    for(unsigned int i = 0; i < length_; ++i){
-        for(unsigned int j = i; j < length_; ++j){
-            if(data_[i * length_ + j] != 0 && data_[j * length_ + i] != 0){
+    for(unsigned int i = 0; i < vertices_; ++i){
+        for(unsigned int j = i; j < vertices_; ++j){
+            if(matrix_(i, j) != 0 && matrix_(j, i) != 0){
                 f_stream << "\t" << i + 1 << " -- " << j + 1 << ";\n";
             }
         }
@@ -139,32 +81,30 @@ bool Graph::exportGraphToDot<GraphType::Undirected>(const std::filesystem::path&
 }
 
 template <>
-bool Graph::exportGraphToDot<GraphType::Directed>(const std::filesystem::path& filepath) const{
-    if(length_ == 0) return false;
+bool Graph::exportGraphToDot<GraphType::Directed>(const std::filesystem::path& path) const{
+    if(vertices_ == 0) return false;
 
-    std::filesystem::path f = filepath;
+    std::filesystem::path filename = path;
 
-    if(f.extension() != ".dot"){
-        f.replace_extension(std::filesystem::path(".dot"));
-    }
+    if(filename.extension() != ".dot") filename.replace_extension(std::filesystem::path(".dot"));
 
-    std::fstream f_stream(f, std::ios::out);
+    std::fstream f_stream(filename, std::ios::out);
 
-    std::string graphname(f.stem());
+    std::string graphname(filename.stem());
     graphname.erase(std::remove(graphname.begin(), graphname.end(), '\"'), graphname.end());
 
     f_stream << "digraph " <<  graphname << "{\n";
 
-    for(unsigned int i = 0; i < length_; ++i){
+    for(unsigned int i = 0; i < vertices_; ++i){
         f_stream << "\t" << i + 1 << ";\n";
     }
 
-    for(unsigned int i = 0; i < length_; ++i){
-        for(unsigned int j = i; j < length_; ++j){
-            if(data_[i * length_ + j] != 0){
+    for(unsigned int i = 0; i < vertices_; ++i){
+        for(unsigned int j = i; j < vertices_; ++j){
+            if(matrix_(i, j) != 0){
                 f_stream << "\t" << i + 1 << " -> " << j + 1 << ";\n";
             }
-            else if(data_[j * length_ + i] != 0){
+            else if(matrix_(j, i) != 0){
                 f_stream << "\t" << j + 1 << " -> " << i + 1 << ";\n";
             }
         }

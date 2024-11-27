@@ -37,11 +37,11 @@ public:
         return GraphAlgorithms::getShortestPathBetweenVertices(graph, begin, end);
     }
 
-    Graph FloydWarshallAlgorighm(const Graph& graph){
+    auto FloydWarshallAlgorighm(const Graph& graph) -> Matrix<int>{
         return GraphAlgorithms::getShortestPathsBetweenAllVertices(graph);
     }
 
-    Graph PrimAlgorithm(const Graph& graph){
+    auto PrimAlgorithm(const Graph& graph) -> Matrix<int>{
         return GraphAlgorithms::getLeastSpanningTree(graph);
     }
 };

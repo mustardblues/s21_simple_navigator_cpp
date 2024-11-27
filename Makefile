@@ -14,12 +14,19 @@ GRAPH_OBJECTS						:= graph.o
 ALGORITMS_SOURCES					:= src/algorithms/algorithms.cpp
 ALGORITMS_OBJECTS					:= algorithms.o
 
+MATRIX_TEST_SOURCES					:= tests/unit/matrix/test_matrix.cpp
+
 GRAPH_TEST_SOURCES					:= tests/unit/graph/test_graph.cpp
 
 CONTAINERS_TEST_SOURCES					:= tests/unit/containers/test_queue.cpp \
 							   tests/unit/containers/test_stack.cpp
 
 ALGORITMS_TEST_SOURCES					:= test/unit/algorithms/test_algorithms.cpp
+
+COMMON_TEST_SOURCES						:=  $(MATRIX_TEST_SOURCES) \
+											$(CONTAINERS_TEST_SOURCES) \
+											$(GRAPH_TEST_SOURCES) \
+											$(ALGORITMS_TEST_SOURCES)
 
 # ----------------------------------------------------------------------------------------- Targets
 
@@ -43,8 +50,13 @@ build:
 
 .PHONY: test
 test: # Testing of all project sources
-	$(CXX) $(CXXFLAGS) --coverage $(CONTAINERS_TEST_SOURCES) $(GRAPH_TEST_SOURCES) $(GRAPH_SOURCES) \
+	$(CXX) $(CXXFLAGS) --coverage $(COMMON_TEST_SOURCES) \
 	tests/unit/main.cpp -o test $(SYSFLAGS) && ./test
+
+.PHONY: test_matrix
+test_matrix: # Testing of Matrix class
+	$(CXX) $(CXXFLAGS) --coverage $(MATRIX_TEST_SOURCES) \
+	tests/unit/main.cpp -o test_matrix $(SYSFLAGS) && ./test_matrix
 
 .PHONY: test_graph
 test_graph: # Testing of Graph class

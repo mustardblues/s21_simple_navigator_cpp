@@ -10,6 +10,8 @@
 #include <sstream>
 #include <iterator>
 
+#include "./../matrix/matrix.hpp"
+
 namespace s21{
 
 /**
@@ -38,7 +40,7 @@ public:
     /**
      * @brief Creates an N x N adjacency matrix where N is the length parameter.
      */
-    Graph(const std::size_t length);
+    Graph(const std::size_t vertices);
 
     /**
      * @brief Loads the adjacency matrix from a file.
@@ -58,29 +60,10 @@ public:
     /**
      * @brief Clears all data of the Graph class after leaving the scope.
      */
-    ~Graph();
+    ~Graph() = default;
 
-    /**
-     * @brief Copying assignment operator.
-     * @param other Graph reference parameter.
-     */
-    Graph& operator = (const Graph& other);
-
-    /**
-     * @brief Rvalue assignment operator.
-     * @param other Rvalue parameter.
-     */
-    Graph& operator = (Graph&& other) noexcept;
-
-    /**
-     * @brief Compares the adjacency matrices of two graphs.
-     * @return 0 if the graphs aren't equal, or 1 if they are.
-     */
-    constexpr bool operator == (const Graph& other) const{
-        if(length_ != other.length_) return false;
-
-        return std::equal(other.begin(), other.end(), data_);
-    }
+    Graph& operator = (const Graph& other) = delete;
+    Graph& operator = (Graph&& other) noexcept = delete;
 
     /**
      * @brief Provides access to graph without segmentation fault.
@@ -88,7 +71,7 @@ public:
      * @param col Column element index.
      * @return Element reference from graph.
      */
-    [[ nodiscard ]] int& operator () (const std::size_t row, const std::size_t col);
+    [[ nodiscard ]] int& operator () (const std::size_t row, const std::size_t cols) { return matrix_(row, cols); }
 
     /**
      * @brief Provides access to graph without segmentation fault.
@@ -96,57 +79,26 @@ public:
      * @param col Column element index.
      * @return Value stored in the graph.
      */
-    int operator () (const std::size_t row, const std::size_t col) const;
+    int operator () (const std::size_t row, const std::size_t cols) const { return matrix_(row, cols); }
 
     /**
      * @brief Provides access to graph without segmentation fault.
      * @param pos Element index.
      * @return Value stored in the graph.
      */
-    int& operator () (const std::size_t pos) {
-        if(pos < capacity_) return data_[pos];
-
-        static int default_value{};
-
-        return default_value;
-    };
+    [[ nodiscard ]] int& operator () (const std::size_t pos) {return matrix_(pos); }
 
     /**
      * @brief Provides access to graph without segmentation fault.
      * @param pos Element index.
      * @return Value stored in the graph.
      */
-    int operator () (const std::size_t pos) const { return pos < capacity_ ? data_[pos] : 0; };
+    int operator () (const std::size_t pos) const {return matrix_(pos); }
 
     /**
      * @brief Returns the number of vertices.
      */
-    std::size_t length() const { return length_; }
-
-    /**
-     * @brief Returns the size of adjacency matrix.
-     */
-    std::size_t capacity() const { return capacity_; }
-
-    /**
-     * @brief Returns a constant first pointer from the graph.
-     */
-    [[ nodiscard ]] int* begin() { return data_; }
-
-    /**
-     * @brief Returns a constant last pointer from the graph.
-     */
-    [[ nodiscard ]] int* end() { return data_ + capacity_; }
-
-    /**
-     * @brief Returns a constant first pointer from the graph.
-     */
-    const int* begin() const { return data_; }
-
-    /**
-     * @brief Returns a constant last pointer from the graph.
-     */
-    const int* end() const { return data_ + capacity_; }
+    std::size_t vertices() const { return vertices_; }
 
     /**
      * @brief Gets graph information from adjacency matrices.
@@ -163,17 +115,10 @@ public:
     template <GraphType T>
     bool exportGraphToDot(const std::filesystem::path& filepath) const;
 
-    /**
-     * @brief Clears all data of the Graph class.
-     */
-    void clear() { this->~Graph(); }
-
 private:
-    std::size_t length_;
-    std::size_t capacity_;
+    std::size_t vertices_;
 
-    int* data_;
-
+    Matrix<int> matrix_;
 };
 
 } // namespace s21

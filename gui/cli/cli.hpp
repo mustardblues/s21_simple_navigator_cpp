@@ -7,6 +7,13 @@
 
 namespace s21{
 
+class Cli final{
+public:
+
+private:
+    Presenter presenter_;
+};
+
 }
 
 #endif // _A2_SIMPLE_NAVIGATOR_GUI_CLI_CLI_HPP_
