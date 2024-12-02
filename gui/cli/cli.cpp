@@ -5,12 +5,12 @@
 namespace s21{
 
 void Cli::start() const{
-    int input;
+    int input{};
+
+    options_[0]();
 
     while(true){
-        std::cout << Text::help << Font::endf;
-        std::cout << "> ";
-
+        std::cout << Text::select;
         std::cin >> input;
 
         if(std::cin.fail()){
@@ -21,7 +21,6 @@ void Cli::start() const{
         }
         else{
             options_[input]();
-            std::cout << std::endl;
         }
     }
 }
@@ -29,8 +28,7 @@ void Cli::start() const{
 void Cli::loadGraph(){
     std::filesystem::path path;
 
-    std::cout << Text::file_path << Font::endf;
-    std::cout << Text::new_line;
+    std::cout << Text::file;
 
     std::cin >> path;
 
@@ -39,27 +37,25 @@ void Cli::loadGraph(){
     bool code = presenter_.loadGraph(path);
 
     if(code){
-        std::cout << Font::bold << Font::green << Text::success << Font::endf;
+        std::cout << Text::ok;
     }
     else{
-        std::cout << Font::bold << Font::red << Text::error << Font::endf;
+        std::cout << Text::fail;
     }
 }
 
 void Cli::exportGraph() const{
     int format{};
 
-    std::cout << Text::graph_format << Font::endf;
-    std::cout << Text::new_line;
+    std::cout << Text::format << Text::select;
 
     std::cin >> format;
 
-    if(std::cin.fail() || !(format > 0 && format < 3)) return;
+    if(std::cin.fail() || !(format >= 0 && format < 2)) return;
 
     std::filesystem::path path;
 
-    std::cout << Text::file_path << Font::endf;
-    std::cout << Text::new_line;
+    std::cout << Text::file;
 
     std::cin >> path;
 
@@ -73,18 +69,17 @@ void Cli::exportGraph() const{
     }
 
     if(code){
-        std::cout << Font::bold << Font::green << Text::success << Font::endf;
+        std::cout << Text::ok;
     }
     else{
-        std::cout << Font::bold << Font::red << Text::error << Font::endf;
+        std::cout << Text::fail;
     }
 }
 
 void Cli::depthFirstSearch() const{
     unsigned int start_vertex{};
 
-    std::cout << Text::specify_vertex << Font::endf;
-    std::cout << Text::new_line;
+    std::cout << Text::vertices;
 
     std::cin >> start_vertex;
 
@@ -93,8 +88,6 @@ void Cli::depthFirstSearch() const{
     std::deque<unsigned int> code = presenter_.depthFirstSearch(start_vertex);
 
     if(!code.empty()){
-        std::cout << Font::bold << Font::blue << Text::output << Font::endf;
-
         for(unsigned int i = 0; i < code.size() - 1; ++i){
             std::cout << code[i] << " -> ";
         }
@@ -102,15 +95,14 @@ void Cli::depthFirstSearch() const{
         std::cout << code.back()  << std::endl;
     }
     else{
-        std::cout << Font::bold << Font::red << Text::error << Font::endf;
+        std::cout << Text::fail;
     }
 }
 
 void Cli::breadthFirstSearch() const{
     unsigned int start_vertex{};
 
-    std::cout << Text::specify_vertex << Font::endf;
-    std::cout << Text::new_line;
+    std::cout << Text::vertices;
 
     std::cin >> start_vertex;
 
@@ -119,24 +111,21 @@ void Cli::breadthFirstSearch() const{
     std::deque<unsigned int> code = presenter_.breadthFirstSearch(start_vertex);
 
     if(!code.empty()){
-        std::cout << Font::bold << Font::blue << Text::output << Font::endf;
-
         for(unsigned int i = 0, size = code.size() - 1; i < size; ++i){
             std::cout << code[i] << " -> ";
         }
 
-        std::cout << code.back() << "\n" << Font::endf;
+        std::cout << code.back() << "\n";
     }
     else{
-        std::cout << Font::bold << Font::red << Text::error << Font::endf;
+        std::cout << Text::fail;
     }
 }
 
 void Cli::dijkstraAlgorithm() const{
     unsigned int begin{}, end{};
 
-    std::cout << Text::specify_vertex << Font::endf;
-    std::cout << Text::new_line;
+    std::cout << Text::vertices;
 
     std::cin >> begin >> end;
 
@@ -144,7 +133,7 @@ void Cli::dijkstraAlgorithm() const{
 
     int code = presenter_.dijkstraAlgorithm(begin, end);
 
-    std::cout << Font::bold << Font::blue << Text::output << Font::endf << code << "\n";
+    std::cout << code << "\n";
 }
 
 
