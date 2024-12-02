@@ -1,7 +1,11 @@
 // Copyright 2024 stranger
 
-#include "cli/cli.hpp"
+#include "cli.hpp"
 
-int main(int argc, char* argv[]){
-    
+int main(void){
+    s21::Cli gui;
+
+    gui.start();
+
+    return 0;
 }

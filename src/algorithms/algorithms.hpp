@@ -7,6 +7,8 @@
 #include <vector>
 #include <limits>
 
+#include "./../matrix/matrix.hpp"
+
 #include "./../graph/graph.hpp"
 
 #include "./../containers/queue/queue.hpp"

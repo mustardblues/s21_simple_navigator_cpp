@@ -8,6 +8,8 @@ namespace s21{
 auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
     std::deque<unsigned int> dist;
 
+    if(graph.vertices() == 0) return dist;
+
     const std::size_t vertices = graph.vertices();
 
     Stack<unsigned int> stack;
@@ -36,6 +38,8 @@ auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int st
 auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
     std::deque<unsigned int> dist;
 
+    if(graph.vertices() == 0) return dist;
+
     const std::size_t vertices = graph.vertices();
 
     Queue<unsigned int> queue;
@@ -62,6 +66,8 @@ auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int 
 }
 
 int GraphAlgorithms::getShortestPathBetweenVertices(const Graph &graph, const unsigned int begin, const unsigned int end){
+    if(graph.vertices() == 0) return 0;
+
     const std::size_t vertices = graph.vertices();
 
     PriorityQueue<std::pair<unsigned int, unsigned int>> queue;

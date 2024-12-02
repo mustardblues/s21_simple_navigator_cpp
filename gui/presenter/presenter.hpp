@@ -21,29 +21,39 @@ public:
     Presenter& operator = (const Presenter& other) = delete;
     Presenter& operator = (Presenter&& other) noexcept = delete;
 
-    Graph loadGraphFromFile(const std::filesystem::path& filepath){
-        return Graph(filepath);
+    bool loadGraph(const std::filesystem::path& path){
+        return graph_.loadGraphFromFile(path);
     }
 
-    auto depthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
-        return GraphAlgorithms::depthFirstSearch(graph, start_vertex);
+    bool exportUndirectedGraph(const std::filesystem::path& path) const{
+        return graph_.exportGraphToDot<GraphType::Undirected>(path);
     }
 
-    auto breadthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
-        return GraphAlgorithms::breadthFirstSearch(graph, start_vertex);
+    bool exportDirectedGraph(const std::filesystem::path& path) const{
+        return graph_.exportGraphToDot<GraphType::Directed>(path);
     }
 
-    int DijkstraAlgorithm(const Graph& graph, const unsigned int begin, const unsigned int end){
-        return GraphAlgorithms::getShortestPathBetweenVertices(graph, begin, end);
+    auto depthFirstSearch(const unsigned int start_vertex) const -> std::deque<unsigned int>{
+        return GraphAlgorithms::depthFirstSearch(graph_, start_vertex);
     }
 
-    auto FloydWarshallAlgorighm(const Graph& graph) -> Matrix<int>{
-        return GraphAlgorithms::getShortestPathsBetweenAllVertices(graph);
+    auto breadthFirstSearch( const unsigned int start_vertex) const -> std::deque<unsigned int>{
+        return GraphAlgorithms::breadthFirstSearch(graph_, start_vertex);
     }
 
-    auto PrimAlgorithm(const Graph& graph) -> Matrix<int>{
-        return GraphAlgorithms::getLeastSpanningTree(graph);
+    int dijkstraAlgorithm(const unsigned int begin, const unsigned int end) const{
+        return GraphAlgorithms::getShortestPathBetweenVertices(graph_, begin, end);
     }
+
+    auto floydWarshallAlgorighm() -> Matrix<int> const{
+        return GraphAlgorithms::getShortestPathsBetweenAllVertices(graph_);
+    }
+
+    auto primAlgorithm() -> Matrix<int> const{
+        return GraphAlgorithms::getLeastSpanningTree(graph_);
+    }
+
+    Graph graph_;
 };
 
 } // namespace s21
