@@ -16,48 +16,37 @@ namespace s21::Text{
 inline constexpr char new_line[] = "> ";
 
 inline constexpr char help[] =
-    "+-------------------------+\n" \
-    "| Options:                |\n" \
-    "| 0) load                 |\n" \
-    "| 1) export               |\n" \
-    "| 2) depth first search   |\n" \
-    "| 3) breadth first search |\n" \
-    "| 4) Dijkstra             |\n" \
-    "| 5) Floyd-Warshall       |\n" \
-    "| 6) Prim                 |\n" \
-    "+-------------------------+\n";
+    "\t0\tload                 \n" \
+    "\t1\texport               \n" \
+    "\t2\tdepth first search   \n" \
+    "\t3\tbreadth first search \n" \
+    "\t4\tDijkstra             \n" \
+    "\t5\tFloyd-Warshall       \n" \
+    "\t6\tPrim                 \n";
 
 inline constexpr char error[] =
-    "+-------------------------+\n" \
-    "|          Error          |\n" \
-    "+-------------------------+\n";
+    "\t+-------------------------+\n" \
+    "\t|          Error          |\n" \
+    "\t+-------------------------+\n";
 
 inline constexpr char success[] =
-    "+-------------------------+\n" \
-    "|         Success         |\n" \
-    "+-------------------------+\n";
+    "\t+-------------------------+\n" \
+    "\t|         Success         |\n" \
+    "\t+-------------------------+\n";
 
 inline constexpr char output[] =
-    "+-------------------------+\n" \
-    "|         Output          |\n" \
-    "+-------------------------+\n";
+    "\t+-------------------------+\n" \
+    "\t|         Output          |\n" \
+    "\t+-------------------------+\n";
 
-inline constexpr char file_path[] =
-    "+-------------------------+\n" \
-    "|   Enter the file path   |\n" \
-    "+-------------------------+\n";
+inline constexpr char file_path[] = 
+    "\tabc\tEnter the file path\n";
 
 inline constexpr char graph_format[] =
-    "+-------------------------+\n" \
-    "| Enter file format:      |\n" \
-    "| 1) directed format      |\n" \
-    "| 2) undirected format    |\n" \
-    "+-------------------------+\n";
+    "\t1\tdirected format      \n" \
+    "\t2\tundirected format    \n";
 
-inline constexpr char specify_vertex[] =
-    "+-------------------------+\n" \
-    "|   Specify the vertices  |\n" \
-    "+-------------------------+\n";
+inline constexpr char specify_vertex[] = "\tSpecify the vertices\n";
 
 } // namespace s21::Eng
 

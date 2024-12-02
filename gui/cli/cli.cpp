@@ -19,11 +19,9 @@ void Cli::start() const{
 
             if(std::cin.eof()) return;
         }
-        else if(input < 0 || input > 6){
-            return;
-        }
         else{
             options_[input]();
+            std::cout << std::endl;
         }
     }
 }
@@ -95,7 +93,7 @@ void Cli::depthFirstSearch() const{
     std::deque<unsigned int> code = presenter_.depthFirstSearch(start_vertex);
 
     if(!code.empty()){
-        std::cout << Font::bold << Font::green << Text::output << Font::endf;
+        std::cout << Font::bold << Font::blue << Text::output << Font::endf;
 
         for(unsigned int i = 0; i < code.size() - 1; ++i){
             std::cout << code[i] << " -> ";
@@ -121,7 +119,7 @@ void Cli::breadthFirstSearch() const{
     std::deque<unsigned int> code = presenter_.breadthFirstSearch(start_vertex);
 
     if(!code.empty()){
-        std::cout << Font::bold << Font::green << Text::output << Font::endf;
+        std::cout << Font::bold << Font::blue << Text::output << Font::endf;
 
         for(unsigned int i = 0, size = code.size() - 1; i < size; ++i){
             std::cout << code[i] << " -> ";
@@ -146,7 +144,7 @@ void Cli::dijkstraAlgorithm() const{
 
     int code = presenter_.dijkstraAlgorithm(begin, end);
 
-    std::cout << Font::green << Text::output << Font::endf << code << std::endl;
+    std::cout << Font::bold << Font::blue << Text::output << Font::endf << code << "\n";
 }
 
 
