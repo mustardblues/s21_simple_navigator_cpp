@@ -45,11 +45,11 @@ public:
         return GraphAlgorithms::getShortestPathBetweenVertices(graph_, begin, end);
     }
 
-    auto floydWarshallAlgorighm() -> Matrix<int> const{
+    auto floydWarshallAlgorighm() const -> Matrix<int>{
         return GraphAlgorithms::getShortestPathsBetweenAllVertices(graph_);
     }
 
-    auto primAlgorithm() -> Matrix<int> const{
+    auto primAlgorithm() const -> Matrix<int>{
         return GraphAlgorithms::getLeastSpanningTree(graph_);
     }
 

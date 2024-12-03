@@ -109,7 +109,7 @@ public:
      * @param graph Contains information about the vertices and edges of the graph.
      * @return 
      */
-    static auto getShortestPathsBetweenAllVertices(Graph &graph) -> Matrix<int>;
+    static auto getShortestPathsBetweenAllVertices(const Graph &graph) -> Matrix<int>;
 
     /**
      * @brief Prim's algorithm for finding minimum spanning tree.

@@ -39,8 +39,10 @@ help:
 	@grep -E '^[a-zA-Z0-9 - _]+:.*#'  Makefile | sort | while read -r l; do \
 	printf "\033[1;36m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
 
+.PHONY: build
 build:
-	$(CXX) $(CXXFLAGS) $(GRAPH_SOURCES) $(ALGORITMS_SOURCES) main.cpp -o build
+	$(CXX) $(CXXFLAGS) $(GRAPH_SOURCES) $(ALGORITMS_SOURCES) \
+	gui/cli/main.cpp gui/cli/cli.cpp -o build
 
 # ------------------------------------------------------------------------------------- Application
 

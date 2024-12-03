@@ -12,41 +12,56 @@
 
 #include "./../presenter/presenter.hpp"
 
-namespace s21::Text{
-
-inline constexpr char select[] = "select:~$ ";
-
-inline constexpr char info[] =
-    "(1) load               (2) export\n" \
-    "(3) depth first search (4) breadth first search \n" \
-    "(5) Dijkstra           (6) Floyd-Warshall\n" \
-    "(7) Prim               (0) info\n";
-
-inline constexpr char fail[] =
-    "FAIL\n";
-
-inline constexpr char ok[] =
-    "OK\n";
-
-inline constexpr char file[] = 
-    "select file:~$ ";
-
-inline constexpr char format[] =
-    "(0) directed format    (1) undirected format\n";
-
-inline constexpr char vertices[] = 
-    "select vertices:~$ ";
-
-} // namespace s21::Text
-
-namespace s21::Font{
+namespace s21::TextSettings{
 
 inline constexpr char reset[] = "\033[0m";
-inline constexpr char bold[] = "\033[1m";
-inline constexpr char red[] = "\033[31m";
-inline constexpr char green[] = "\033[32m";
+inline constexpr char f_red[] = "\033[31m";
+inline constexpr char f_green[] = "\033[32m";
 
-} // namespace s21::CliColors
+
+} // namespace s21::FontSettings
+
+namespace s21::TextInfo{
+
+inline constexpr char creators[] =
+    "+-------------------------------------------------------------------------------------------------------+\n" \
+    "| A2_SimpleNavigator_CPP command-line interface. Created by zekkoaem ferdinan stranger                  |\n" \
+    "+-------------------------------------------------------------------------------------------------------+\n";
+
+inline constexpr char menu[] =
+    "+-------------------------------------------------------------------------------------------------------+\n" \
+    "| 0 :: Menu                 Show this message.                                                          |\n" \
+    "| 1 :: Load                 Loads graph data from an adjacency matrix file.                             |\n" \
+    "| 2 :: Export               Creates a .dot file with the graph data.                                    |\n" \
+    "| 3 :: Depth first search   Performs graph traversal using a depth first search algorithm.              |\n" \
+    "| 4 :: Breadth first search Performs graph traversal using a breadth first search algorithm.            |\n" \
+    "| 5 :: Dijkstra             Outputs the shortest distance between two vertices of the graph.            |\n" \
+    "| 6 :: Floyd-Warshall       Outputs a matrix with the shortest paths between all vertices of the graph. |\n" \
+    "| 7 :: Prim                 Outputs the matrix of the graph's spanning tree.                            |\n" \
+    "+-------------------------------------------------------------------------------------------------------+\n";
+
+inline constexpr char g_format[] =
+    "+-------------------------------------------------------------------------------------------------------+\n" \
+    "| 0 :: directed format                                                                                  |\n" \
+    "| 1 :: undirected format                                                                                |\n" \
+    "+-------------------------------------------------------------------------------------------------------+\n";
+
+inline constexpr char fail[] =
+    "+-------------------------------------------------------------------------------------------------------+\n" \
+    "|                                                FAILURE                                                |\n" \
+    "+-------------------------------------------------------------------------------------------------------+\n";
+
+inline constexpr char success[] =
+    "+-------------------------------------------------------------------------------------------------------+\n" \
+    "|                                                SUCCESS                                                |\n" \
+    "+-------------------------------------------------------------------------------------------------------+\n";
+
+inline constexpr char result[] =
+    "+-------------------------------------------------------------------------------------------------------+\n" \
+    "|                                                RESULT                                                 |\n" \
+    "+-------------------------------------------------------------------------------------------------------+\n";
+
+} // namespace s21::Text
 
 namespace s21{
 
@@ -75,12 +90,14 @@ private:
     Presenter presenter_;
 
     std::vector<std::function<void()>> options_{
-        {[](){ std::cout << Text::info; }},
+        {[](){ std::cout << TextInfo::menu; }},
         {[this](){ this->loadGraph(); }},
         {[this](){ this->exportGraph(); }},
         {[this](){ this->depthFirstSearch(); }},
         {[this](){ this->breadthFirstSearch(); }},
         {[this](){ this->dijkstraAlgorithm(); }},
+        {[this](){ this->floydWarshallAlgorighm(); }},
+        {[this](){ this->primAlgorithm(); }}
     };
 
 };

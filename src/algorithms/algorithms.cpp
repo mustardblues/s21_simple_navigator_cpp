@@ -101,19 +101,21 @@ int GraphAlgorithms::getShortestPathBetweenVertices(const Graph &graph, const un
     return 0;
 }
 
-auto GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph) -> Matrix<int>{
+auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> Matrix<int>{
     const std::size_t vertices = graph.vertices();
+
+    if(vertices == 0) return Matrix<int>();
 
     Matrix<int> matrix(vertices, vertices);
     const std::size_t capacity = matrix.capacity();
     const int infinity = static_cast<int>(Constants::inf);
-    // O(N)
+
     for(unsigned int i = 0; i < capacity; ++i){
         matrix(i) = infinity;
 
         if(graph(i) != 0) matrix(i) = graph(i);
     }
-    // O(logN)
+
     for(unsigned int i = 0; i < capacity; i += vertices + 1){
         matrix(i) = 0;
     }
@@ -135,6 +137,8 @@ auto GraphAlgorithms::getShortestPathsBetweenAllVertices(Graph &graph) -> Matrix
 
 auto GraphAlgorithms::getLeastSpanningTree(const Graph& graph) -> Matrix<int>{
     const std::size_t vertices = graph.vertices();
+
+    if(vertices == 0) return Matrix<int>();
 
     Matrix<int> matrix(vertices, vertices);
 
