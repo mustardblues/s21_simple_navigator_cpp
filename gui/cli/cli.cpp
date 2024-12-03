@@ -5,14 +5,11 @@
 namespace s21{
 
 void Cli::start() const{
-    int input{};
-
-    std::cout << TextInfo::creators;
-    options_[0]();
+    std::cout << TextInfo::creators << TextInfo::menu;
 
     while(true){
-        std::cout << "> ";
-        std::cin >> input;
+        std::cout << "Option: ";
+        int index = this->userInput<int>();
 
         if(std::cin.fail()){
             std::cin.clear();
@@ -20,18 +17,36 @@ void Cli::start() const{
 
             if(std::cin.eof()) return;
         }
-        else if(input >= 0 && input < 8){
-            options_[input]();
+        else if(index >= 0 && index < 9){
+            if(index > 1 && presenter_.graph_.vertices() != 0){
+                options_[index]();
+            }
+            else if(index < 2){
+                options_[index]();
+            }
+            else{
+                std::cout << TextSettings::f_red << TextInfo::fail << TextSettings::reset;
+            }
         }
     }
 }
 
+template <typename T>
+T Cli::userInput() const{
+    std::string str;
+    std::getline(std::cin, str);
+    std::stringstream stream(str);
+
+    T code{};
+    stream >> code;
+
+    return code;
+}
+
 void Cli::loadGraph(){
-    std::filesystem::path path;
+    std::cout << "File: ";
 
-    std::cout << "Select file > ";
-
-    std::cin >> path;
+    std::filesystem::path path = this->userInput<std::filesystem::path>();
 
     if(std::cin.fail()) return;
 
@@ -46,83 +61,66 @@ void Cli::loadGraph(){
 }
 
 void Cli::exportGraph() const{
-    int format{};
+    std::cout << TextInfo::g_format;
 
-    std::cout << TextInfo::g_format << "Select format > ";
-
-    std::cin >> format;
+    std::cout << "Format: ";
+    int format = this->userInput<int>();
 
     if(std::cin.fail() || !(format >= 0 && format < 2)) return;
 
-    std::filesystem::path path;
-
-    std::cout << "Select file > ";
-
-    std::cin >> path;
-
-    bool code{};
+    std::cout << "File: ";
+    std::filesystem::path path = this->userInput<std::filesystem::path>();
 
     if(format == 0){
-        code = presenter_.exportDirectedGraph(path);
+        presenter_.exportDirectedGraph(path);
     }
     else if(format == 1){
-        code = presenter_.exportUndirectedGraph(path);
+        presenter_.exportUndirectedGraph(path);
     }
 
-    if(code){
-        std::cout << TextSettings::f_green << TextInfo::success << TextSettings::reset;
-    }
-    else{
-        std::cout << TextSettings::f_red << TextInfo::fail << TextSettings::reset;
-    }
+    std::cout << TextSettings::f_green << TextInfo::success << TextSettings::reset;
 }
 
 void Cli::depthFirstSearch() const{
-    unsigned int start_vertex{};
+    std::cout << "Vertex: ";
+    int start_vertex = this->userInput<int>();
 
-    std::cout << "Select vertex > ";
+    if(!std::cin.fail()){
+        std::deque<unsigned int> code = presenter_.depthFirstSearch(start_vertex);
 
-    std::cin >> start_vertex;
+        std::cout << TextInfo::result;
 
-    if(std::cin.fail()) return;
+        for(unsigned int i = 0; i < code.size() - 1; ++i){
+            std::cout << code[i] << " -> ";
+        }
 
-    std::deque<unsigned int> code = presenter_.depthFirstSearch(start_vertex);
-
-    std::cout << TextInfo::result;
-
-    for(unsigned int i = 0; i < code.size() - 1; ++i){
-        std::cout << code[i] << " -> ";
+        std::cout << code.back()  << std::endl;
     }
-
-    std::cout << code.back()  << std::endl;
 }
 
 void Cli::breadthFirstSearch() const{
-    unsigned int start_vertex{};
+    std::cout << "Vertex: ";
+    int start_vertex = this->userInput<int>();
 
-    std::cout << "Select vertex > ";
+    if(!std::cin.fail()){
+        std::deque<unsigned int> code = presenter_.breadthFirstSearch(start_vertex);
 
-    std::cin >> start_vertex;
+        std::cout << TextInfo::result;
 
-    if(std::cin.fail()) return;
+        for(unsigned int i = 0, size = code.size() - 1; i < size; ++i){
+            std::cout << code[i] << " -> ";
+        }
 
-    std::deque<unsigned int> code = presenter_.breadthFirstSearch(start_vertex);
-
-    std::cout << TextInfo::result;
-
-    for(unsigned int i = 0, size = code.size() - 1; i < size; ++i){
-        std::cout << code[i] << " -> ";
+        std::cout << code.back() << "\n";   
     }
-
-    std::cout << code.back() << "\n";
 }
 
 void Cli::dijkstraAlgorithm() const{
-    unsigned int begin{}, end{};
+    std::cout << "Vertex 1: ";
+    int begin = this->userInput<int>();
 
-    std::cout << "Select vertices > ";
-
-    std::cin >> begin >> end;
+    std::cout << "Vertex 2: ";
+    int end = this->userInput<int>();
 
     if(std::cin.fail()) return;
 
@@ -133,8 +131,6 @@ void Cli::dijkstraAlgorithm() const{
 
 void Cli::floydWarshallAlgorighm() const{
     Matrix<int> matrix = presenter_.floydWarshallAlgorighm();
-
-    if(matrix.capacity() == 0) return;
 
     std::cout << TextInfo::result;
 
@@ -149,8 +145,6 @@ void Cli::floydWarshallAlgorighm() const{
 
 void Cli::primAlgorithm() const{
     Matrix<int> matrix = presenter_.primAlgorithm();
-
-    if(matrix.capacity() == 0) return;
 
     std::cout << TextInfo::result;
 

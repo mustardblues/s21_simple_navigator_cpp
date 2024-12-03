@@ -7,6 +7,7 @@
 #include <vector>
 #include <limits>
 #include <iostream>
+#include <sstream>
 #include <filesystem>
 #include <functional>
 
@@ -78,6 +79,9 @@ public:
     void start() const;
 
 private:
+    template <typename T>
+    T userInput() const;
+
     void loadGraph();
     void exportGraph() const;
 
