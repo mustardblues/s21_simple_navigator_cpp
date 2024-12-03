@@ -5,27 +5,22 @@
 namespace s21{
 
 void Cli::start() const{
-    std::cout << TextInfo::creators << TextInfo::menu;
+    std::cout << TextSettings::f_green << TextInfo::title << TextSettings::reset;
+    std::cout << TextInfo::menu;
 
-    while(true){
-        std::cout << "Option: ";
-        int index = this->userInput<int>();
+    for(int index{}; index != -1; ){
+        std::cout << "~ ";
+        index = this->userInput<int>();
 
-        if(std::cin.fail()){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            if(std::cin.eof()) return;
-        }
-        else if(index >= 0 && index < 9){
-            if(index > 1 && presenter_.graph_.vertices() != 0){
+        if(index >= 0 && index < 9){
+            if(presenter_.graph_.vertices() != 0){
                 options_[index]();
             }
             else if(index < 2){
                 options_[index]();
             }
             else{
-                std::cout << TextSettings::f_red << TextInfo::fail << TextSettings::reset;
+                std::cout << TextSettings::f_red << "[Fail]\n\n" << TextSettings::reset;
             }
         }
     }
@@ -38,102 +33,101 @@ T Cli::userInput() const{
     std::stringstream stream(str);
 
     T code{};
-    stream >> code;
+
+    if(std::cin.fail()){
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if(std::cin.eof()) exit(1);
+    }
+    else{
+        stream >> code;
+    }
 
     return code;
 }
 
 void Cli::loadGraph(){
-    std::cout << "File: ";
+    std::cout << "Enter file name:\n" << "~ ";
 
     std::filesystem::path path = this->userInput<std::filesystem::path>();
 
-    if(std::cin.fail()) return;
-
-    bool code = presenter_.loadGraph(path);
-
-    if(code){
-        std::cout << TextSettings::f_green << TextInfo::success << TextSettings::reset;
+    if(presenter_.loadGraph(path)){
+        std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
     }
     else{
-        std::cout << TextSettings::f_red << TextInfo::fail << TextSettings::reset;
+        std::cout << TextSettings::f_red << "[Fail]\n\n" << TextSettings::reset;
     }
 }
 
 void Cli::exportGraph() const{
-    std::cout << TextInfo::g_format;
-
-    std::cout << "Format: ";
-    int format = this->userInput<int>();
-
-    if(std::cin.fail() || !(format >= 0 && format < 2)) return;
-
-    std::cout << "File: ";
+    std::cout << "Enter file name:\n" << "~ ";
     std::filesystem::path path = this->userInput<std::filesystem::path>();
 
-    if(format == 0){
-        presenter_.exportDirectedGraph(path);
-    }
-    else if(format == 1){
-        presenter_.exportUndirectedGraph(path);
+    std::cout << "Directed format? 0 (false) 1 (true):\n" << "~ ";
+    int format = this->userInput<int>();
+
+    if(format < 0 || format > 1){
+        std::cout << TextSettings::f_red << "[Fail]\n\n" << TextSettings::reset;
+
+        return;
     }
 
-    std::cout << TextSettings::f_green << TextInfo::success << TextSettings::reset;
+    if(format == 0){
+        presenter_.exportUndirectedGraph(path);
+    }
+    else if(format == 1){
+        presenter_.exportDirectedGraph(path);
+    }
+
+    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
 }
 
 void Cli::depthFirstSearch() const{
-    std::cout << "Vertex: ";
+    std::cout << "Select vertex:\n" << "~ ";
     int start_vertex = this->userInput<int>();
 
-    if(!std::cin.fail()){
-        std::deque<unsigned int> code = presenter_.depthFirstSearch(start_vertex);
+    std::deque<unsigned int> dist = presenter_.depthFirstSearch(start_vertex);
 
-        std::cout << TextInfo::result;
-
-        for(unsigned int i = 0; i < code.size() - 1; ++i){
-            std::cout << code[i] << " -> ";
-        }
-
-        std::cout << code.back()  << std::endl;
+    for(unsigned int i = 0; i < dist.size() - 1; ++i){
+        std::cout << dist[i] << " -> ";
     }
+
+    std::cout << dist.back()  << std::endl;
+
+    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
 }
 
 void Cli::breadthFirstSearch() const{
-    std::cout << "Vertex: ";
+    std::cout << "Select vertex:\n" << "~ ";
     int start_vertex = this->userInput<int>();
 
-    if(!std::cin.fail()){
-        std::deque<unsigned int> code = presenter_.breadthFirstSearch(start_vertex);
+    std::deque<unsigned int> dist = presenter_.breadthFirstSearch(start_vertex);
 
-        std::cout << TextInfo::result;
-
-        for(unsigned int i = 0, size = code.size() - 1; i < size; ++i){
-            std::cout << code[i] << " -> ";
-        }
-
-        std::cout << code.back() << "\n";   
+    for(unsigned int i = 0, size = dist.size() - 1; i < size; ++i){
+        std::cout << dist[i] << " -> ";
     }
+
+    std::cout << dist.back() << "\n";   
+
+    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
 }
 
 void Cli::dijkstraAlgorithm() const{
-    std::cout << "Vertex 1: ";
+    std::cout << "Select first vertex:\n" << "~ ";
     int begin = this->userInput<int>();
 
-    std::cout << "Vertex 2: ";
+    std::cout << "Select second vertex:\n" << "~ ";
     int end = this->userInput<int>();
 
-    if(std::cin.fail()) return;
+    std::cout << presenter_.dijkstraAlgorithm(begin, end) << "\n";
 
-    int code = presenter_.dijkstraAlgorithm(begin, end);
-
-    std::cout << TextInfo::result << code << "\n";
+    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
 }
 
 void Cli::floydWarshallAlgorighm() const{
     Matrix<int> matrix = presenter_.floydWarshallAlgorighm();
 
-    std::cout << TextInfo::result;
-
     for(unsigned int i = 0, rows = matrix.rows(); i < rows; ++i){
         for(unsigned int j = 0, colls = matrix.columns(); j < colls; ++j){
             std::cout << matrix(i, j) << " ";
@@ -141,13 +135,13 @@ void Cli::floydWarshallAlgorighm() const{
 
         std::cout << "\n";
     }
+
+    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
 }
 
 void Cli::primAlgorithm() const{
     Matrix<int> matrix = presenter_.primAlgorithm();
 
-    std::cout << TextInfo::result;
-
     for(unsigned int i = 0, rows = matrix.rows(); i < rows; ++i){
         for(unsigned int j = 0, colls = matrix.columns(); j < colls; ++j){
             std::cout << matrix(i, j) << " ";
@@ -155,6 +149,8 @@ void Cli::primAlgorithm() const{
 
         std::cout << "\n";
     }
+
+    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
 }
 
-} // namespace s21s
+} // namespace s21

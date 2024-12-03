@@ -24,43 +24,26 @@ inline constexpr char f_green[] = "\033[32m";
 
 namespace s21::TextInfo{
 
-inline constexpr char creators[] =
-    "+-------------------------------------------------------------------------------------------------------+\n" \
-    "| A2_SimpleNavigator_CPP command-line interface. Created by zekkoaem ferdinan stranger                  |\n" \
-    "+-------------------------------------------------------------------------------------------------------+\n";
-
+inline constexpr char title[] = 
+"   ____    __             __  ___ ___\n" \
+"  / __/___/ /  ___  ___  / / |_  <  /\n" \
+" _\\ \\/ __/ _ \\/ _ \\/ _ \\/ / / __// / \n" \
+"/___/\\__/_//_/\\___/\\___/_/ /____/_/  \n"; 
+                                     
 inline constexpr char menu[] =
-    "+-------------------------------------------------------------------------------------------------------+\n" \
-    "| 0 :: Menu                 Show this message.                                                          |\n" \
-    "| 1 :: Load                 Loads graph data from an adjacency matrix file.                             |\n" \
-    "| 2 :: Export               Creates a .dot file with the graph data.                                    |\n" \
-    "| 3 :: Depth first search   Performs graph traversal using a depth first search algorithm.              |\n" \
-    "| 4 :: Breadth first search Performs graph traversal using a breadth first search algorithm.            |\n" \
-    "| 5 :: Dijkstra             Outputs the shortest distance between two vertices of the graph.            |\n" \
-    "| 6 :: Floyd-Warshall       Outputs a matrix with the shortest paths between all vertices of the graph. |\n" \
-    "| 7 :: Prim                 Outputs the matrix of the graph's spanning tree.                            |\n" \
-    "+-------------------------------------------------------------------------------------------------------+\n";
-
-inline constexpr char g_format[] =
-    "+-------------------------------------------------------------------------------------------------------+\n" \
-    "| 0 :: directed format                                                                                  |\n" \
-    "| 1 :: undirected format                                                                                |\n" \
-    "+-------------------------------------------------------------------------------------------------------+\n";
-
-inline constexpr char fail[] =
-    "+-------------------------------------------------------------------------------------------------------+\n" \
-    "|                                                FAILURE                                                |\n" \
-    "+-------------------------------------------------------------------------------------------------------+\n";
-
-inline constexpr char success[] =
-    "+-------------------------------------------------------------------------------------------------------+\n" \
-    "|                                                SUCCESS                                                |\n" \
-    "+-------------------------------------------------------------------------------------------------------+\n";
-
-inline constexpr char result[] =
-    "+-------------------------------------------------------------------------------------------------------+\n" \
-    "|                                                RESULT                                                 |\n" \
-    "+-------------------------------------------------------------------------------------------------------+\n";
+    "+----+----------------------+-----------------------------------------------------------------------------+\n" \
+    "|  # | Option               | Description                                                                 |\n" \
+    "+----+----------------------+-----------------------------------------------------------------------------+\n" \
+    "| -1 | Exit                 |                                                                             |\n" \
+    "|  0 | Menu                 | Shows this message.                                                         |\n" \
+    "|  1 | Load                 | Loads graph data from an adjacency matrix file.                             |\n" \
+    "|  2 | Export               | Creates a .dot file with the graph data.                                    |\n" \
+    "|  3 | Depth first search   | Performs graph traversal using a depth first search algorithm.              |\n" \
+    "|  4 | Breadth first search | Performs graph traversal using a breadth first search algorithm.            |\n" \
+    "|  5 | Dijkstra             | Outputs the shortest distance between two vertices of the graph.            |\n" \
+    "|  6 | Floyd-Warshall       | Outputs a matrix with the shortest paths between all vertices of the graph. |\n" \
+    "|  7 | Prim                 | Outputs the matrix of the graph's spanning tree.                            |\n" \
+    "+----+----------------------+-----------------------------------------------------------------------------+\n";
 
 } // namespace s21::Text
 
