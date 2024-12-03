@@ -8,6 +8,7 @@
 #include <limits>
 #include <iostream>
 #include <sstream>
+#include <iomanip>
 #include <filesystem>
 #include <functional>
 
@@ -73,6 +74,8 @@ private:
     void dijkstraAlgorithm() const;
     void floydWarshallAlgorighm() const;
     void primAlgorithm() const;
+
+    void printMatrix(const Matrix<int>& matrix) const;
 
     Presenter presenter_;
 

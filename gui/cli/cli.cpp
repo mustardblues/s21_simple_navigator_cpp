@@ -12,7 +12,7 @@ void Cli::start() const{
         std::cout << "~ ";
         index = this->userInput<int>();
 
-        if(index >= 0 && index < 9){
+        if(index >= 0 && index < 8){
             if(presenter_.graph_.vertices() != 0){
                 options_[index]();
             }
@@ -126,31 +126,47 @@ void Cli::dijkstraAlgorithm() const{
 }
 
 void Cli::floydWarshallAlgorighm() const{
-    Matrix<int> matrix = presenter_.floydWarshallAlgorighm();
-
-    for(unsigned int i = 0, rows = matrix.rows(); i < rows; ++i){
-        for(unsigned int j = 0, colls = matrix.columns(); j < colls; ++j){
-            std::cout << matrix(i, j) << " ";
-        }
-
-        std::cout << "\n";
-    }
+    this->printMatrix(presenter_.floydWarshallAlgorighm());
 
     std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
 }
 
 void Cli::primAlgorithm() const{
-    Matrix<int> matrix = presenter_.primAlgorithm();
-
-    for(unsigned int i = 0, rows = matrix.rows(); i < rows; ++i){
-        for(unsigned int j = 0, colls = matrix.columns(); j < colls; ++j){
-            std::cout << matrix(i, j) << " ";
-        }
-
-        std::cout << "\n";
-    }
+    this->printMatrix(presenter_.primAlgorithm());
 
     std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+}
+
+void Cli::printMatrix(const Matrix<int>& matrix) const{
+    const unsigned int size = matrix.rows();
+
+    std::vector<unsigned int> offset(size, false);
+
+    auto number_of_digits = [](const int number){
+        std::ostringstream stream;
+        stream << number;
+        return stream.str().size();
+    };
+
+    for(unsigned int i = 0; i < size; ++i){
+        unsigned int max{};
+
+        for(unsigned int j = 0; j < size; ++j){
+            unsigned int current = number_of_digits(matrix(i, j));
+
+            if(current > max) max = current;
+        }
+
+        offset[i] = max;
+    }
+
+    for(unsigned int i = 0; i < size; ++i){
+        for(unsigned int j = 0; j < size; ++j){
+            std::cout << (j == 0 ? "| " : "");
+            std::cout << std::setw(offset[j]) << matrix(i, j);
+            std::cout << (j == size - 1 ? " |\n" : " ");
+        }
+    }
 }
 
 } // namespace s21
