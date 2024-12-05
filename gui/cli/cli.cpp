@@ -5,8 +5,7 @@
 namespace s21{
 
 void Cli::start() const{
-    std::cout << TextSettings::f_green << TextInfo::title << TextSettings::reset;
-    std::cout << TextInfo::menu;
+    std::cout << text_[2] << text_[3];
 
     for(int index{}; index != -1; ){
         std::cout << "~ ";
@@ -20,7 +19,7 @@ void Cli::start() const{
                 options_[index]();
             }
             else{
-                std::cout << TextSettings::f_red << "[Fail]\n\n" << TextSettings::reset;
+                std::cout << text_[1] << "\n";
             }
         }
     }
@@ -48,27 +47,27 @@ T Cli::userInput() const{
 }
 
 void Cli::loadGraph(){
-    std::cout << "Enter file name:\n" << "~ ";
+    std::cout << text_[4] << "~ ";
 
     std::filesystem::path path = this->userInput<std::filesystem::path>();
 
     if(presenter_.loadGraph(path)){
-        std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+        std::cout << text_[0] << "\n";
     }
     else{
-        std::cout << TextSettings::f_red << "[Fail]\n\n" << TextSettings::reset;
+        std::cout << text_[1] << "\n";
     }
 }
 
 void Cli::exportGraph() const{
-    std::cout << "Enter file name:\n" << "~ ";
+    std::cout << text_[4] << "~ ";
     std::filesystem::path path = this->userInput<std::filesystem::path>();
 
-    std::cout << "Directed format? 0 (false) 1 (true):\n" << "~ ";
+    std::cout << text_[5] << "~ ";
     int format = this->userInput<int>();
 
     if(format < 0 || format > 1){
-        std::cout << TextSettings::f_red << "[Fail]\n\n" << TextSettings::reset;
+        std::cout << text_[1] << "\n";
 
         return;
     }
@@ -80,11 +79,11 @@ void Cli::exportGraph() const{
         presenter_.exportDirectedGraph(path);
     }
 
-    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+    std::cout << text_[0] << "\n";
 }
 
 void Cli::depthFirstSearch() const{
-    std::cout << "Select vertex:\n" << "~ ";
+    std::cout << text_[6] << "~ ";
     int start_vertex = this->userInput<int>();
 
     std::deque<unsigned int> dist = presenter_.depthFirstSearch(start_vertex);
@@ -95,11 +94,11 @@ void Cli::depthFirstSearch() const{
 
     std::cout << dist.back()  << std::endl;
 
-    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+    std::cout << text_[0] << "\n";
 }
 
 void Cli::breadthFirstSearch() const{
-    std::cout << "Select vertex:\n" << "~ ";
+    std::cout << text_[6] << "~ ";
     int start_vertex = this->userInput<int>();
 
     std::deque<unsigned int> dist = presenter_.breadthFirstSearch(start_vertex);
@@ -110,31 +109,31 @@ void Cli::breadthFirstSearch() const{
 
     std::cout << dist.back() << "\n";   
 
-    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+    std::cout << text_[0] << "\n";
 }
 
 void Cli::dijkstraAlgorithm() const{
-    std::cout << "Select first vertex:\n" << "~ ";
+    std::cout << text_[6] << "~ ";
     int begin = this->userInput<int>();
 
-    std::cout << "Select second vertex:\n" << "~ ";
+    std::cout << text_[7] << "~ ";
     int end = this->userInput<int>();
 
     std::cout << presenter_.dijkstraAlgorithm(begin, end) << "\n";
 
-    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+    std::cout << text_[0] << "\n";
 }
 
 void Cli::floydWarshallAlgorighm() const{
     this->printMatrix(presenter_.floydWarshallAlgorighm());
 
-    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+    std::cout << text_[0] << "\n";
 }
 
 void Cli::primAlgorithm() const{
     this->printMatrix(presenter_.primAlgorithm());
 
-    std::cout << TextSettings::f_green << "[Ok]\n\n" << TextSettings::reset;
+    std::cout << text_[0] << "\n";
 }
 
 void Cli::printMatrix(const Matrix<int>& matrix) const{
@@ -162,9 +161,8 @@ void Cli::printMatrix(const Matrix<int>& matrix) const{
 
     for(unsigned int i = 0; i < size; ++i){
         for(unsigned int j = 0; j < size; ++j){
-            std::cout << (j == 0 ? "| " : "");
-            std::cout << std::setw(offset[j]) << matrix(i, j);
-            std::cout << (j == size - 1 ? " |\n" : " ");
+            std::cout << std::setw(offset[j]) << matrix(i, j)
+                << (j == size - 1 ? "\n" : " ");
         }
     }
 }

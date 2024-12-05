@@ -42,7 +42,7 @@ help:
 .PHONY: build
 build:
 	$(CXX) $(CXXFLAGS) $(GRAPH_SOURCES) $(ALGORITMS_SOURCES) \
-	gui/cli/main.cpp gui/cli/cli.cpp -o build
+	$(LANGUAGES) gui/cli/main.cpp gui/cli/cli.cpp -o build
 
 # ------------------------------------------------------------------------------------- Application
 

@@ -8,9 +8,9 @@ namespace s21{
 auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
     std::deque<unsigned int> dist;
 
-    if(graph.vertices() == 0) return dist;
-
     const std::size_t vertices = graph.vertices();
+    
+    if(vertices == 0) return dist;
 
     Stack<unsigned int> stack;
     stack.push(start_vertex - 1);
@@ -38,9 +38,9 @@ auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int st
 auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
     std::deque<unsigned int> dist;
 
-    if(graph.vertices() == 0) return dist;
-
     const std::size_t vertices = graph.vertices();
+    
+    if(vertices == 0) return dist;
 
     Queue<unsigned int> queue;
     queue.push(start_vertex - 1);
@@ -66,9 +66,9 @@ auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int 
 }
 
 int GraphAlgorithms::getShortestPathBetweenVertices(const Graph &graph, const unsigned int begin, const unsigned int end){
-    if(graph.vertices() == 0) return 0;
-
     const std::size_t vertices = graph.vertices();
+
+    if(vertices == 0) return 0;
 
     PriorityQueue<std::pair<unsigned int, unsigned int>> queue;
     queue.push({begin - 1, 0});
@@ -104,9 +104,10 @@ int GraphAlgorithms::getShortestPathBetweenVertices(const Graph &graph, const un
 auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> Matrix<int>{
     const std::size_t vertices = graph.vertices();
 
-    if(vertices == 0) return Matrix<int>();
-
     Matrix<int> matrix(vertices, vertices);
+
+    if(vertices == 0) return matrix;
+
     const std::size_t capacity = matrix.capacity();
     const int infinity = static_cast<int>(Constants::inf);
 
@@ -138,9 +139,9 @@ auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> 
 auto GraphAlgorithms::getLeastSpanningTree(const Graph& graph) -> Matrix<int>{
     const std::size_t vertices = graph.vertices();
 
-    if(vertices == 0) return Matrix<int>();
-
     Matrix<int> matrix(vertices, vertices);
+
+    if(vertices == 0) return matrix;
 
     PriorityQueue<EdgeWeight> queue;
     queue.push({0, 0, 0});
