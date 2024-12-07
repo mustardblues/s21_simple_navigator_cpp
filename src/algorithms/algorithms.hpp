@@ -24,51 +24,6 @@ inline constexpr float inf = std::numeric_limits<float>::max();
 
 namespace s21{
 
-/**
- * @struct EdgeWeight
- * @brief Contains information about weights of graph between vertices.
- */
-struct EdgeWeight final{
-    /**
-     * @brief Weights between graph vertices.
-     */
-    int weight_;
-
-    /**
-     * @brief Row of weight element.
-     */
-    unsigned int row_;
-
-    /**
-     * @brief Column of weight element.
-     */
-    unsigned int column_;
-
-    constexpr bool operator == (const EdgeWeight& other) const{
-        return weight_ == other.weight_;
-    }
-
-    constexpr bool operator != (const EdgeWeight& other) const{
-        return weight_ == other.weight_;
-    }
-
-    constexpr bool operator < (const EdgeWeight& other) const{
-        return weight_ < other.weight_;
-    }
-
-    constexpr bool operator > (const EdgeWeight& other) const{
-        return weight_ > other.weight_;
-    }
-
-    constexpr bool operator <= (const EdgeWeight& other) const{
-        return weight_ <= other.weight_;
-    }
-
-    constexpr bool operator >= (const EdgeWeight& other) const{
-        return weight_ >= other.weight_;
-    }
-};
-
 class GraphAlgorithms final{
 public:
     GraphAlgorithms() = delete;
@@ -102,7 +57,7 @@ public:
      * @param end The last vertex where path ends.
      * @return A numerical result equal to the smallest distance between begin and last parameters.
      */
-    static int getShortestPathBetweenVertices(const Graph &graph, const unsigned int begin, const unsigned int end);
+    static int getShortestPathBetweenVertices(const Graph& graph, const unsigned int begin, const unsigned int end);
 
     /**
      * @brief Floyd–Warshall algorithm algorithm for finding the shortest path in graph between all vertices.

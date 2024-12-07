@@ -25,7 +25,7 @@ TEST(Graph, init){
         s21::Graph graph;
 
         // Assert
-        ASSERT_EQ(graph.length(), 0);
+        ASSERT_EQ(graph.vertices(), 0);
     }
 
     {
@@ -33,7 +33,7 @@ TEST(Graph, init){
         s21::Graph graph(100);
 
         // Assert
-        ASSERT_EQ(graph.length(), 100);        
+        ASSERT_EQ(graph.vertices(), 100);        
     }
 
     {
@@ -51,8 +51,8 @@ TEST(Graph, init){
         s21::Graph graph_2(std::move(graph_1));
 
         // Assert
-        EXPECT_EQ(graph_1.length(), 0); 
-        EXPECT_EQ(graph_2.length(), 100);        
+        EXPECT_EQ(graph_1.vertices(), 0); 
+        EXPECT_EQ(graph_2.vertices(), 100);        
     }
 }
 
@@ -178,7 +178,7 @@ TEST(Graph, operators){
         graph_3 = std::move(graph_1);
 
         // Assert
-        EXPECT_EQ(graph_1.length(), 0);
+        EXPECT_EQ(graph_1.vertices(), 0);
         EXPECT_EQ(graph_3, graph_2);
     }
 }
@@ -233,7 +233,7 @@ TEST(Graph, loadGraphFromFile){
 
         // Assert
         EXPECT_EQ(code, false);
-        EXPECT_EQ(graph.length(), 10);
+        EXPECT_EQ(graph.vertices(), 10);
     }
 
     {
@@ -245,7 +245,7 @@ TEST(Graph, loadGraphFromFile){
         s21::Graph graph_2(11);
 
         // Act
-        bool code = graph_2.loadGraphFromFile("tests/unit/graph/adjacency_matrix.txt");
+        bool code = graph_2.loadGraphFromFile("tests/unit/data/adjacency_matrix_11.txt");
 
         // Assert
         EXPECT_EQ(code, true);
@@ -309,6 +309,6 @@ TEST(Graph, exportGraphToDot){
         EXPECT_EQ(std::filesystem::exists(filepath), true);
         EXPECT_EQ(code, true);
 
-        std::filesystem::remove(filepath);
+        // std::filesystem::remove(filepath);
     }
 }

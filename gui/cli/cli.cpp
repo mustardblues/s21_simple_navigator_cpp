@@ -142,9 +142,11 @@ void Cli::printMatrix(const Matrix<int>& matrix) const{
     std::vector<unsigned int> offset(size, false);
 
     auto number_of_digits = [](const int number){
+        if(number == static_cast<int>(Constants::inf)) return 3;
+
         std::ostringstream stream;
         stream << number;
-        return stream.str().size();
+        return static_cast<int>(stream.str().size());
     };
 
     for(unsigned int i = 0; i < size; ++i){
@@ -161,8 +163,16 @@ void Cli::printMatrix(const Matrix<int>& matrix) const{
 
     for(unsigned int i = 0; i < size; ++i){
         for(unsigned int j = 0; j < size; ++j){
-            std::cout << std::setw(offset[j]) << matrix(i, j)
-                << (j == size - 1 ? "\n" : " ");
+            std::cout << std::setw(offset[j]);
+
+            if(matrix(i, j) != static_cast<int>(Constants::inf)){
+                std::cout << matrix(i, j);
+            }
+            else{
+                std::cout << "inf";
+            }
+
+            std::cout << (j == size - 1 ? "\n" : " ");
         }
     }
 }

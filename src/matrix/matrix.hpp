@@ -14,12 +14,33 @@ public:
     Matrix() : rows_(0), columns_(0), capacity_(0), data_(nullptr) {}
 
     /**
-     * @brief Constructor of class with size parameters.
+     * @brief Class constructor with size parameters.
      */
     Matrix(const std::size_t rows, const std::size_t columns) : rows_(rows), 
                                                                 columns_(columns),
                                                                 capacity_(rows_ * columns_), 
-                                                                data_(new T[capacity_]{}) {}
+                                                                data_(capacity_ != 0 ? new T[capacity_]{} : nullptr) {}
+
+    /**
+     * @brief Class constructor with initializer list.
+     */
+    Matrix(const std::size_t rows, const std::size_t columns, const std::initializer_list<T>& list){
+        if(rows * columns != list.size()) return;
+
+        rows_ = rows;
+        columns_ = columns;
+        capacity_ = rows_ * columns_;
+
+        data_ = new T[capacity_]{};
+
+        unsigned int index = 0;
+
+        for(auto item : list){
+            data_[index] = item;
+
+            ++index;
+        }
+    }
 
     /**
      * @brief Copy contructor.
@@ -96,6 +117,15 @@ public:
     }
 
     /**
+     * @brief compares objects of Matrix class.
+     */
+    bool operator == (const Matrix& other) const{
+        if(rows_ != other.rows_ || columns_ != other.columns_) return false;
+
+        return std::equal(other.begin(), other.end(), data_);
+    }
+
+    /**
      * @brief Provides access to matrix without segmentation fault.
      * @param row Row element index.
      * @param col Column element index.
@@ -152,35 +182,35 @@ public:
     /**
      * @brief Returns the number of matrix rows.
      */
-    std::size_t rows() const { return rows_; }
+    virtual std::size_t rows() const { return rows_; }
 
     /**
      * @brief Returns the number of matrix columns.
      */
-    std::size_t columns() const { return columns_; }
+    virtual std::size_t columns() const { return columns_; }
 
     /**
      * @brief Returns the number of matrix capacity.
      */
-    std::size_t capacity() const { return capacity_; }
+    virtual std::size_t capacity() const { return capacity_; }
 
     /**
-     * @brief Returns a first pointer from the graph.
+     * @brief Returns a first pointer from the matrix.
      */
     [[ nodiscard ]] T* begin(){ return data_; }
 
     /**
-     * @brief Returns a constant first pointer from the graph.
+     * @brief Returns a constant first pointer from the matrix.
      */
     const T* begin() const { return data_; }
 
     /**
-     * @brief Returns a last pointer from the graph.
+     * @brief Returns a last pointer from the matrix.
      */
     [[ nodiscard ]] T* end(){ return data_ + capacity_; }
 
     /**
-     * @brief Returns a constant last pointer from the graph.
+     * @brief Returns a constant last pointer from the matrix.
      */
     const T* end() const { return data_ + capacity_; }
 

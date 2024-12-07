@@ -16,18 +16,19 @@ auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int st
     stack.push(start_vertex - 1);
 
     std::vector<bool> visited(vertices, false);
-    visited[start_vertex - 1] = true;
 
     while(!stack.empty()){
         auto vertex = stack.pop();
 
-        dist.emplace_back(vertex + 1);
+        if(visited[vertex]){
+            visited[vertex] = true;
 
-        for(unsigned int i = 0; i < vertices; ++i){
-            if(visited[i] == false && graph(vertex, i) != 0){
-                stack.push(i);
+            dist.emplace_back(vertex + 1);
 
-                visited[i] = true;
+            for(unsigned int i = 0; i < vertices; ++i){
+                if(graph(vertex, i) != 0){
+                    stack.push(i);
+                }
             }
         }
     }
@@ -46,18 +47,19 @@ auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int 
     queue.push(start_vertex - 1);
 
     std::vector<bool> visited(vertices, false);
-    visited[start_vertex - 1] = true;
 
     while(!queue.empty()){
         auto vertex = queue.pop();
 
-        dist.emplace_back(vertex + 1);
+        if(visited[vertex]){
+            visited[vertex] = true;
 
-        for(unsigned int i = 0; i < vertices; ++i){
-            if(visited[i] == false && graph(vertex, i) != 0){
-                queue.push(i);
+            dist.emplace_back(vertex + 1);
 
-                visited[i] = true;
+            for(unsigned int i = 0; i < vertices; ++i){
+                if(graph(vertex, i) != 0){
+                    queue.push(i);
+                }
             }
         }
     }
@@ -65,25 +67,25 @@ auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int 
     return dist;
 }
 
-int GraphAlgorithms::getShortestPathBetweenVertices(const Graph &graph, const unsigned int begin, const unsigned int end){
+int GraphAlgorithms::getShortestPathBetweenVertices(const Graph& graph, const unsigned int begin, const unsigned int end){
     const std::size_t vertices = graph.vertices();
 
     if(vertices == 0) return 0;
 
     PriorityQueue<std::pair<unsigned int, unsigned int>> queue;
-    queue.push({begin - 1, 0});
+    queue.push({0, begin - 1});
 
     std::vector<bool> visited(vertices, false);
 
     std::vector<unsigned int> dist(vertices, static_cast<unsigned int>(s21::Constants::inf));
-    dist[0] = 0;
+    dist[begin - 1] = 0;
 
     while(!queue.empty()){
         auto [weight, index] = queue.pop();
 
         if(index + 1 == end) return dist[index];
 
-        if(visited[index] == false){
+        if(visited[index]){
             visited[index] = true;
 
             for(unsigned int i = 0; i < vertices; ++i){
@@ -109,10 +111,9 @@ auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> 
     if(vertices == 0) return matrix;
 
     const std::size_t capacity = matrix.capacity();
-    const int infinity = static_cast<int>(Constants::inf);
 
     for(unsigned int i = 0; i < capacity; ++i){
-        matrix(i) = infinity;
+        matrix(i) = static_cast<int>(Constants::inf);  
 
         if(graph(i) != 0) matrix(i) = graph(i);
     }
@@ -124,7 +125,8 @@ auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> 
     for(unsigned int k = 0; k < vertices; ++k){
         for(unsigned int i = 0; i < vertices; ++i){
             for(unsigned int j = 0; j < vertices; ++j){
-                if(matrix(i, k) != infinity && matrix(k, j) != infinity){
+                if(matrix(i, k) != static_cast<int>(Constants::inf) 
+                    && matrix(k, j) != static_cast<int>(Constants::inf)){
                     int weight = matrix(i, k) + matrix(k, j);
 
                     if(matrix(i, j) > weight) matrix(i, j) = weight;
@@ -143,21 +145,22 @@ auto GraphAlgorithms::getLeastSpanningTree(const Graph& graph) -> Matrix<int>{
 
     if(vertices == 0) return matrix;
 
-    PriorityQueue<EdgeWeight> queue;
-    queue.push({0, 0, 0});
+    PriorityQueue<std::pair<unsigned int, unsigned int>> queue;
+
+    std::vector<int> key(vertices, false);
 
     std::vector<bool> visited(vertices, false);
 
     while(!queue.empty()){
         auto [weight, row, col] = queue.pop();
 
-        if(visited[col] == false){
+        if(visited[col]){
             matrix(row, col) = matrix(col, row) = weight;
 
             visited[col] = true;
 
             for(unsigned int i = 0; i < vertices; ++i){
-                if(visited[i] == false && graph(col, i) != 0){
+                if(visited[i] && graph(col, i) != 0 && graph(col, i) < weight){
                     queue.push({graph(col, i), col, i});
                 }
             }

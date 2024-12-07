@@ -62,8 +62,40 @@ public:
      */
     ~Graph() = default;
 
-    Graph& operator = (const Graph& other) = delete;
-    Graph& operator = (Graph&& other) noexcept = delete;
+    /**
+     * @brief Copying assignment operator.
+     * @param other Graph reference parameter.
+     */
+    Graph& operator = (const Graph& other){
+        if(this == &other) return *this;
+
+        vertices_ = other.vertices_;
+        matrix_ = other.matrix_;
+
+        return *this;
+    }
+
+    /**
+     * @brief Rvalue assignment operator.
+     * @param other Rvalue parameter.
+     */
+    Graph& operator = (Graph&& other) noexcept{
+        if(this == &other) return *this;
+
+        vertices_ = other.vertices_;
+        matrix_ = std::move(other.matrix_);
+
+        other.vertices_ = 0;
+
+        return *this;
+    }
+
+    /**
+     * @brief compares objects of the Graph class.
+     */
+    bool operator == (const Graph& other) const{
+        return matrix_ == other.matrix_;
+    }
 
     /**
      * @brief Provides access to graph without segmentation fault.
@@ -94,6 +126,26 @@ public:
      * @return Value stored in the graph.
      */
     int operator () (const std::size_t pos) const {return matrix_(pos); }
+
+    /**
+     * @brief Returns a first pointer from the graph.
+     */
+    [[ nodiscard ]] int* begin(){ return matrix_.begin(); }
+
+    /**
+     * @brief Returns a constant first pointer from the matrix.
+     */
+    const int* begin() const { return matrix_.begin(); }
+
+    /**
+     * @brief Returns a last pointer from the graph.
+     */
+    [[ nodiscard ]] int* end(){ return matrix_.end(); }
+    
+    /**
+     * @brief Returns a constant last pointer from the matrix.
+     */
+    const int* end() const { return matrix_.end(); }
 
     /**
      * @brief Returns the number of vertices.
