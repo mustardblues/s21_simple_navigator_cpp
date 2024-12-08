@@ -66,20 +66,19 @@ void Cli::exportGraph() const{
     std::cout << text_[5] << "~ ";
     int format = this->userInput<int>();
 
-    if(format < 0 || format > 1){
-        std::cout << text_[1] << "\n";
-
-        return;
-    }
-
     if(format == 0){
         presenter_.exportUndirectedGraph(path);
+
+        std::cout << text_[0] << "\n";
     }
     else if(format == 1){
         presenter_.exportDirectedGraph(path);
-    }
 
-    std::cout << text_[0] << "\n";
+        std::cout << text_[0] << "\n";
+    }
+    else{
+        std::cout << text_[1] << "\n";
+    }
 }
 
 void Cli::depthFirstSearch() const{
@@ -88,11 +87,17 @@ void Cli::depthFirstSearch() const{
 
     std::deque<unsigned int> dist = presenter_.depthFirstSearch(start_vertex);
 
-    for(unsigned int i = 0; i < dist.size() - 1; ++i){
+    if(dist.size() == 0){
+        std::cout << text_[1] << "\n";
+
+        return;
+    }
+
+    for(unsigned int i = 0, size = dist.size() - 1; i < size; ++i){
         std::cout << dist[i] << " -> ";
     }
 
-    std::cout << dist.back()  << std::endl;
+    std::cout << dist.back() << std::endl;
 
     std::cout << text_[0] << "\n";
 }
@@ -102,6 +107,12 @@ void Cli::breadthFirstSearch() const{
     int start_vertex = this->userInput<int>();
 
     std::deque<unsigned int> dist = presenter_.breadthFirstSearch(start_vertex);
+
+    if(dist.size() == 0){
+        std::cout << text_[1] << "\n";
+
+        return;
+    }
 
     for(unsigned int i = 0, size = dist.size() - 1; i < size; ++i){
         std::cout << dist[i] << " -> ";
@@ -119,6 +130,12 @@ void Cli::dijkstraAlgorithm() const{
     std::cout << text_[7] << "~ ";
     int end = this->userInput<int>();
 
+    if(begin < 0 || end < 0){
+        std::cout << text_[1] << "\n";
+
+        return;
+    }
+
     std::cout << presenter_.dijkstraAlgorithm(begin, end) << "\n";
 
     std::cout << text_[0] << "\n";
@@ -131,7 +148,16 @@ void Cli::floydWarshallAlgorighm() const{
 }
 
 void Cli::primAlgorithm() const{
-    this->printMatrix(presenter_.primAlgorithm());
+    std::cout << text_[6] << "~ ";
+    int start_vertex = this->userInput<int>();
+
+    if(start_vertex < 0){
+        std::cout << text_[1] << "\n";
+
+        return;
+    }
+
+    this->printMatrix(presenter_.primAlgorithm(start_vertex));
 
     std::cout << text_[0] << "\n";
 }

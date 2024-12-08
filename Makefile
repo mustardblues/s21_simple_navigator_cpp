@@ -10,30 +10,40 @@ SYSFLAGS				+= -pthread -lrt -lm
 
 endif
 
+
+
+
 GRAPH_SOURCES			:= src/graph/graph.cpp
 GRAPH_OBJECTS			:= graph.o
 
 ALGORITMS_SOURCES		:= src/algorithms/algorithms.cpp
 ALGORITMS_OBJECTS		:= algorithms.o
 
-COMMON_SOURCES			:=  $(GRAPH_SOURCES) \
+COMMON_SOURCES			:= $(GRAPH_SOURCES) \
 							$(ALGORITMS_SOURCES)
+
+
+
 
 MATRIX_TEST_SOURCES		:= tests/unit/matrix/test_matrix.cpp
 
 GRAPH_TEST_SOURCES		:= tests/unit/graph/test_graph.cpp
 
-CONTAINERS_TEST_SOURCES	:=  tests/unit/containers/test_queue.cpp \
-							tests/unit/containers/test_stack.cpp
+CONTAINERS_TEST_SOURCES	:= tests/unit/containers/test_priority_queue.cpp \
+							tests/unit/containers/test_queue.cpp \
+							tests/unit/containers/test_stack.cpp \
 
 ALGORITMS_TEST_SOURCES	:= tests/unit/algorithms/test_algorithms.cpp
 
-COMMON_TEST_SOURCES		:=  $(MATRIX_TEST_SOURCES) \
+COMMON_TEST_SOURCES		:= $(MATRIX_TEST_SOURCES) \
 							$(CONTAINERS_TEST_SOURCES) \
 							$(GRAPH_TEST_SOURCES) \
 							$(ALGORITMS_TEST_SOURCES)
 
-CLI_SOURCES				:=  gui/cli/cli.cpp \
+
+
+
+CLI_SOURCES				:= gui/cli/cli.cpp \
 							gui/cli/main.cpp
 
 APP						:= SimpleNavigator
@@ -60,9 +70,17 @@ unistall: #unistall the console application
 
 # ------------------------------------------------------------------------------------------- Tests
 
+.PHONY: gcov_report
+gcov_report: test # checks the coverage of the project libraries
+	@ lcov -t "SimpleNavigator" -o SimpleNavigator.info -c -d . --no-external 
+	@ genhtml -o gcov_report SimpleNavigator.info
+
+	- rm -rf *.gcno *.gcda *.info 
+	open gcov_report/index.html
+
 .PHONY: test
 test: #testing of all project sources
-	$(CXX) $(CXXFLAGS) --coverage $(COMMON_TEST_SOURCES) \
+	$(CXX) $(CXXFLAGS) --coverage $(COMMON_SOURCES) $(COMMON_TEST_SOURCES) \
 	tests/unit/main.cpp -o test $(SYSFLAGS) && ./test
 
 .PHONY: test_algorithms
@@ -123,7 +141,7 @@ cppcheck:
 	$(GRAPH_SOURCES) $(ALGORITMS_SOURCES) 
 
 .PHONY: leaks
-leaks: test #checking code for leaks using Valgrind utility
+leaks: #checking code for leaks using Valgrind utility
 	valgrind --tool=memcheck --track-fds=yes --quiet --trace-children=yes \
 	--track-origins=yes --leak-check=full --show-leak-kinds=all -s ./test
 
@@ -134,6 +152,7 @@ clean:
 	- rm test_graph
 	- rm test_containers
 	- rm test_algorithms
+	- rm test_matrix
 	- rm *.dot
 	- rm -rf gcov_report
 	- rm *.gcno *.gcda *.info

@@ -40,7 +40,7 @@ public:
      * @param start_vertex The starting vertex from where path starts.
      * @return The deque of the vertices which algorithm visited.
      */
-    static auto depthFirstSearch(const Graph& graph, const unsigned int start_vertex = 1) -> std::deque<unsigned int>;
+    static auto depthFirstSearch(const Graph& graph, const std::size_t start_vertex = 1) -> std::deque<unsigned int>;
 
     /**
      * @brief A BFS algorithm for shortest path finding in graph.
@@ -48,7 +48,7 @@ public:
      * @param start_vertex The starting vertex from where path starts.
      * @return The deque of the vertices which algorithm visited.
      */
-    static auto breadthFirstSearch(const Graph& graph, const unsigned int start_vertex = 1) -> std::deque<unsigned int>;
+    static auto breadthFirstSearch(const Graph& graph, const std::size_t start_vertex = 1) -> std::deque<unsigned int>;
 
     /**
      * @brief Dijkstra's algorithm for finding the shortest path in graph.
@@ -57,7 +57,7 @@ public:
      * @param end The last vertex where path ends.
      * @return A numerical result equal to the smallest distance between begin and last parameters.
      */
-    static int getShortestPathBetweenVertices(const Graph& graph, const unsigned int begin, const unsigned int end);
+    static int getShortestPathBetweenVertices(const Graph& graph, const std::size_t begin, const std::size_t end);
 
     /**
      * @brief Floyd–Warshall algorithm algorithm for finding the shortest path in graph between all vertices.
@@ -71,7 +71,7 @@ public:
      * @param graph Contains information about the vertices and edges of the graph.
      * @return The object of Graph class with the adjacency matrix for the minimal spanning tree.
      */
-    static auto getLeastSpanningTree(const Graph& graph) -> Matrix<int>;
+    static auto getLeastSpanningTree(const Graph& graph, const std::size_t start_vertex = 1) -> Matrix<int>;
 };
 
 } // namespace s21

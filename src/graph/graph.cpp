@@ -4,24 +4,6 @@
 
 namespace s21{
 
-Graph::Graph() : vertices_(0) {}
-
-Graph::Graph(const std::size_t vertices) : vertices_(vertices), matrix_(vertices_, vertices_) {}
-
-Graph::Graph(const std::filesystem::path& path){ this->loadGraphFromFile(path); }
-
-Graph::Graph(const Graph& other){
-    vertices_ = other.vertices_;
-    matrix_ = other.matrix_;
-}
-
-Graph::Graph(Graph&& other) noexcept{
-    vertices_ = other.vertices_;
-    matrix_ = std::move(other.matrix_);
-
-    other.vertices_ = 0;
-}
-
 bool Graph::loadGraphFromFile(const std::filesystem::path& path){
     if(!std::filesystem::exists(path.c_str())) return false;
 

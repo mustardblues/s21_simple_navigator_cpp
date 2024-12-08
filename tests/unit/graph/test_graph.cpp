@@ -5,7 +5,7 @@
 
 #include "./../../../src/graph/graph.hpp"
 
-inline constexpr std::initializer_list<unsigned int> list{
+inline constexpr std::initializer_list<int> list{
     0, 29, 20, 21, 16, 31, 100, 12, 4, 31, 18,
     29, 0, 15, 29, 28, 40, 72, 21, 29, 41, 12,
     20, 15, 0, 15, 14, 25, 81, 9, 23, 27, 13,
@@ -245,7 +245,7 @@ TEST(Graph, loadGraphFromFile){
         s21::Graph graph_2(11);
 
         // Act
-        bool code = graph_2.loadGraphFromFile("tests/unit/data/adjacency_matrix_11.txt");
+        bool code = graph_2.loadGraphFromFile("tests/unit/data/matrix_11.txt");
 
         // Assert
         EXPECT_EQ(code, true);

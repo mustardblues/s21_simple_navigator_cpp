@@ -35,27 +35,35 @@ public:
     /**
      * @brief Creates an empty adjacency matrix.
      */
-    Graph();
+    Graph() : vertices_(0) {}
 
     /**
      * @brief Creates an N x N adjacency matrix where N is the length parameter.
      */
-    Graph(const std::size_t vertices);
+    Graph(const std::size_t vertices) : vertices_(vertices), matrix_(vertices_, vertices_) {}
 
     /**
      * @brief Loads the adjacency matrix from a file.
      */
-    Graph(const std::filesystem::path& filepath);
+    Graph(const std::filesystem::path& path){ this->loadGraphFromFile(path); }
 
     /**
      * @brief Copies data from another object from Graph class.
      */
-    Graph(const Graph& other);
+    Graph(const Graph& other){
+        vertices_ = other.vertices_;
+        matrix_ = other.matrix_;
+    }
 
     /**
      * @brief Moves data from another object from Graph class.
      */
-    Graph(Graph&& other) noexcept;
+    Graph(Graph&& other) noexcept{
+        vertices_ = other.vertices_;
+        matrix_ = std::move(other.matrix_);
+
+        other.vertices_ = 0;
+    }
 
     /**
      * @brief Clears all data of the Graph class after leaving the scope.

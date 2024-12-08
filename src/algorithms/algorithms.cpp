@@ -5,12 +5,12 @@
 
 namespace s21{
 
-auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
-    std::deque<unsigned int> dist;
-
+auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const std::size_t start_vertex) -> std::deque<unsigned int>{
     const std::size_t vertices = graph.vertices();
-    
-    if(vertices == 0) return dist;
+
+    if(vertices == 0 || start_vertex == 0 || start_vertex > vertices) return std::deque<unsigned int>();
+
+    std::deque<unsigned int> dist;
 
     Stack<unsigned int> stack;
     stack.push(start_vertex - 1);
@@ -20,7 +20,7 @@ auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int st
     while(!stack.empty()){
         auto vertex = stack.pop();
 
-        if(visited[vertex]){
+        if(!visited[vertex]){
             visited[vertex] = true;
 
             dist.emplace_back(vertex + 1);
@@ -36,12 +36,12 @@ auto GraphAlgorithms::depthFirstSearch(const Graph& graph, const unsigned int st
     return dist;
 }
 
-auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int start_vertex) -> std::deque<unsigned int>{
-    std::deque<unsigned int> dist;
-
+auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const std::size_t start_vertex) -> std::deque<unsigned int>{
     const std::size_t vertices = graph.vertices();
     
-    if(vertices == 0) return dist;
+    if(vertices == 0 || start_vertex == 0 || start_vertex > vertices) return std::deque<unsigned int>();
+
+    std::deque<unsigned int> dist;
 
     Queue<unsigned int> queue;
     queue.push(start_vertex - 1);
@@ -51,7 +51,7 @@ auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int 
     while(!queue.empty()){
         auto vertex = queue.pop();
 
-        if(visited[vertex]){
+        if(!visited[vertex]){
             visited[vertex] = true;
 
             dist.emplace_back(vertex + 1);
@@ -67,10 +67,10 @@ auto GraphAlgorithms::breadthFirstSearch(const Graph& graph, const unsigned int 
     return dist;
 }
 
-int GraphAlgorithms::getShortestPathBetweenVertices(const Graph& graph, const unsigned int begin, const unsigned int end){
+int GraphAlgorithms::getShortestPathBetweenVertices(const Graph& graph, const std::size_t begin, const std::size_t end){
     const std::size_t vertices = graph.vertices();
 
-    if(vertices == 0) return 0;
+    if(vertices == 0 || (begin == 0 || begin > vertices) || (end == 0 || end > vertices)) return 0;
 
     PriorityQueue<std::pair<unsigned int, unsigned int>> queue;
     queue.push({0, begin - 1});
@@ -85,7 +85,7 @@ int GraphAlgorithms::getShortestPathBetweenVertices(const Graph& graph, const un
 
         if(index + 1 == end) return dist[index];
 
-        if(visited[index]){
+        if(!visited[index]){
             visited[index] = true;
 
             for(unsigned int i = 0; i < vertices; ++i){
@@ -106,9 +106,9 @@ int GraphAlgorithms::getShortestPathBetweenVertices(const Graph& graph, const un
 auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> Matrix<int>{
     const std::size_t vertices = graph.vertices();
 
-    Matrix<int> matrix(vertices, vertices);
+    if(vertices == 0) return Matrix<int>();
 
-    if(vertices == 0) return matrix;
+    Matrix<int> matrix(vertices, vertices);
 
     const std::size_t capacity = matrix.capacity();
 
@@ -125,8 +125,7 @@ auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> 
     for(unsigned int k = 0; k < vertices; ++k){
         for(unsigned int i = 0; i < vertices; ++i){
             for(unsigned int j = 0; j < vertices; ++j){
-                if(matrix(i, k) != static_cast<int>(Constants::inf) 
-                    && matrix(k, j) != static_cast<int>(Constants::inf)){
+                if(matrix(i, k) != static_cast<int>(Constants::inf) && matrix(k, j) != static_cast<int>(Constants::inf)){
                     int weight = matrix(i, k) + matrix(k, j);
 
                     if(matrix(i, j) > weight) matrix(i, j) = weight;
@@ -138,33 +137,50 @@ auto GraphAlgorithms::getShortestPathsBetweenAllVertices(const Graph& graph) -> 
     return matrix;
 }
 
-auto GraphAlgorithms::getLeastSpanningTree(const Graph& graph) -> Matrix<int>{
+auto GraphAlgorithms::getLeastSpanningTree(const Graph& graph, const std::size_t start_vertex) -> Matrix<int>{
     const std::size_t vertices = graph.vertices();
 
-    Matrix<int> matrix(vertices, vertices);
+    if(vertices == 0 || start_vertex == 0 || start_vertex > vertices) return Matrix<int>();
 
-    if(vertices == 0) return matrix;
+    std::vector<int> root(vertices, 0);
+    root[start_vertex - 1] = -1;
 
-    PriorityQueue<std::pair<unsigned int, unsigned int>> queue;
-
-    std::vector<int> key(vertices, false);
+    std::vector<int> key(vertices, static_cast<int>(Constants::inf));
+    key[start_vertex - 1] = 0;
 
     std::vector<bool> visited(vertices, false);
 
+    PriorityQueue<std::pair<int, int>> queue;
+    queue.push({start_vertex - 1, start_vertex - 1});
+
     while(!queue.empty()){
-        auto [weight, row, col] = queue.pop();
-
-        if(visited[col]){
-            matrix(row, col) = matrix(col, row) = weight;
-
-            visited[col] = true;
+        auto [weight, index] = queue.pop();
+        
+        if(!visited[index]){
+            visited[index] = true;
 
             for(unsigned int i = 0; i < vertices; ++i){
-                if(visited[i] && graph(col, i) != 0 && graph(col, i) < weight){
-                    queue.push({graph(col, i), col, i});
+                const int weight = graph(index, i);
+
+                if(!visited[i] && weight != 0 && weight < key[i]){
+                    key[i] = weight;
+
+                    root[i] = index;
+
+                    queue.push({weight, i});
                 }
-            }
+            }   
         }
+    }
+
+    Matrix<int> matrix(vertices, vertices);
+
+    for(unsigned int i = 0; i < vertices; ++i){
+        const int index = root[i];
+
+        matrix(index, i) = graph(index, i);
+
+        if(graph(i, index) != 0) matrix(i, index) = graph(i, index);
     }
 
     return matrix;

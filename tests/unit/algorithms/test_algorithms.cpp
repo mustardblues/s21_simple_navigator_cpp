@@ -55,14 +55,11 @@ TEST(GraphAlgorithms, depthFirstSearch){
     }
 
     {
-        // Arrange
-        std::deque<unsigned int> path{7};
-
         // Act
         std::deque<unsigned int> result = s21::GraphAlgorithms::depthFirstSearch(graph_1, 7);
 
         // Assert
-        ASSERT_EQ(result, path);
+        ASSERT_EQ(result.size(), 0);
     }
 
     {
@@ -117,17 +114,16 @@ TEST(GraphAlgorithms, breadthFirstSearch){
 
         // Assert
         ASSERT_EQ(result, path);
+
+        s21::Graph graph;
     }
 
     {
-        // Arrange
-        std::deque<unsigned int> path{7};
-
         // Act
         std::deque<unsigned int> result = s21::GraphAlgorithms::breadthFirstSearch(graph_1, 7);
 
         // Assert
-        ASSERT_EQ(result, path);
+        ASSERT_EQ(result.size(), 0);
     }
 
     {
@@ -272,14 +268,11 @@ TEST(GraphAlgorithms, getShortestPathBetweenAllVertices){
     }
 
     {
-        // Arrange
-        s21::Matrix<int> matrix;
-
         // Act
         s21::Matrix<int> result = s21::GraphAlgorithms::getShortestPathsBetweenAllVertices(empty);
 
         // Assert
-        ASSERT_EQ(result, matrix);
+        ASSERT_EQ(result.capacity(), 0);
     }
 }
 
@@ -306,13 +299,10 @@ TEST(GraphAlgorithms, getLeastSpanningTree){
     }
 
     {
-        // Arrange
-        s21::Matrix<int> matrix;
-
         // Act
         s21::Matrix<int> result = s21::GraphAlgorithms::getLeastSpanningTree(empty);
 
         // Assert
-        ASSERT_EQ(result, matrix);
+        ASSERT_EQ(result.capacity(), 0);
     }
 }

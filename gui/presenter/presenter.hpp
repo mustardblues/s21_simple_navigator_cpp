@@ -33,15 +33,15 @@ public:
         return graph_.exportGraphToDot<GraphType::Directed>(path);
     }
 
-    auto depthFirstSearch(const unsigned int start_vertex) const -> std::deque<unsigned int>{
+    auto depthFirstSearch(const std::size_t start_vertex) const -> std::deque<unsigned int>{
         return GraphAlgorithms::depthFirstSearch(graph_, start_vertex);
     }
 
-    auto breadthFirstSearch( const unsigned int start_vertex) const -> std::deque<unsigned int>{
+    auto breadthFirstSearch(const std::size_t start_vertex) const -> std::deque<unsigned int>{
         return GraphAlgorithms::breadthFirstSearch(graph_, start_vertex);
     }
 
-    int dijkstraAlgorithm(const unsigned int begin, const unsigned int end) const{
+    int dijkstraAlgorithm(const std::size_t begin, const std::size_t end) const{
         return GraphAlgorithms::getShortestPathBetweenVertices(graph_, begin, end);
     }
 
@@ -49,8 +49,8 @@ public:
         return GraphAlgorithms::getShortestPathsBetweenAllVertices(graph_);
     }
 
-    auto primAlgorithm() const -> Matrix<int>{
-        return GraphAlgorithms::getLeastSpanningTree(graph_);
+    auto primAlgorithm(const std::size_t start_vertex) const -> Matrix<int>{
+        return GraphAlgorithms::getLeastSpanningTree(graph_, start_vertex);
     }
 
     Graph graph_;
