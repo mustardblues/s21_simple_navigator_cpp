@@ -7,14 +7,11 @@
 #include <vector>
 #include <limits>
 
-#include "./../matrix/matrix.hpp"
-
 #include "./../graph/graph.hpp"
-
 #include "./../containers/queue/queue.hpp"
 #include "./../containers/stack/stack.hpp"
-
 #include "./../containers/priority_queue/priority_queue.hpp"
+#include "tsm/aco/aco.hpp"
 
 namespace s21::Constants{
 
@@ -72,6 +69,11 @@ public:
      * @return The object of Graph class with the adjacency matrix for the minimal spanning tree.
      */
     static auto getLeastSpanningTree(const Graph& graph, const std::size_t start_vertex = 1) -> Matrix<int>;
+
+    /**
+     * @brief 
+     */
+    static TsmResult solveTravelingSalesmanProblem(const Graph& graph);
 };
 
 } // namespace s21

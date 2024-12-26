@@ -53,6 +53,10 @@ public:
         return GraphAlgorithms::getLeastSpanningTree(graph_, start_vertex);
     }
 
+    TsmResult ACOAlgorithm() const{
+        return GraphAlgorithms::solveTravelingSalesmanProblem(graph_);
+    }
+
     Graph graph_;
 };
 

@@ -18,20 +18,21 @@
 
 // 3 Main menu
 {   
-    "                                                                                     SimpleNavigator v1.0.0\n" \
-    "+----+----------------------+-----------------------------------------------------------------------------+\n" \
-    "|  # | Option               | Description                                                                 |\n" \
-    "+----+----------------------+-----------------------------------------------------------------------------+\n" \
-    "| -1 | Exit                 |                                                                             |\n" \
-    "|  0 | Main menu            | Shows this message.                                                         |\n" \
-    "|  1 | Load                 | Loads graph data from an adjacency matrix file.                             |\n" \
-    "|  2 | Export               | Creates a .dot file with the graph data.                                    |\n" \
-    "|  3 | Depth first search   | Performs graph traversal using a depth first search algorithm.              |\n" \
-    "|  4 | Breadth first search | Performs graph traversal using a breadth first search algorithm.            |\n" \
-    "|  5 | Dijkstra             | Outputs the shortest distance between two vertices of the graph.            |\n" \
-    "|  6 | Floyd-Warshall       | Outputs a matrix with the shortest paths between all vertices of the graph. |\n" \
-    "|  7 | Prim                 | Outputs the matrix of the graph's spanning tree.                            |\n" \
-    "+----+----------------------+-----------------------------------------------------------------------------+\n"
+    "                                                                                        SimpleNavigator v1.0.0\n" \
+    "+----+-------------------------+-----------------------------------------------------------------------------+\n" \
+    "|  # | Option                  | Description                                                                 |\n" \
+    "+----+-------------------------+-----------------------------------------------------------------------------+\n" \
+    "| -1 | Exit                    |                                                                             |\n" \
+    "|  0 | Main menu               | Shows this message.                                                         |\n" \
+    "|  1 | Load                    | Loads graph data from an adjacency matrix file.                             |\n" \
+    "|  2 | Export                  | Creates a .dot file with the graph data.                                    |\n" \
+    "|  3 | Depth first search      | Performs graph traversal using a depth first search algorithm.              |\n" \
+    "|  4 | Breadth first search    | Performs graph traversal using a breadth first search algorithm.            |\n" \
+    "|  5 | Dijkstra                | Outputs the shortest distance between two vertices of the graph.            |\n" \
+    "|  6 | Floyd-Warshall          | Outputs a matrix with the shortest paths between all vertices of the graph. |\n" \
+    "|  7 | Prim                    | Outputs the matrix of the graph's spanning tree.                            |\n" \
+    "|  8 | Ant Colony Optimization | Outputs the matrix of the graph's spanning tree.                            |\n" \
+    "+----+-------------------------+-----------------------------------------------------------------------------+\n"
 },
 
 // 4 Select the file name

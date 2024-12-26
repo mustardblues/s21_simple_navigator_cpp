@@ -16,7 +16,9 @@ endif
 GRAPH_SOURCES			:= src/graph/graph.cpp
 GRAPH_OBJECTS			:= graph.o
 
-ALGORITMS_SOURCES		:= src/algorithms/algorithms.cpp
+ALGORITMS_SOURCES		:= src/algorithms/algorithms.cpp \
+							src/algorithms/tsm/aco/aco.cpp
+
 ALGORITMS_OBJECTS		:= algorithms.o
 
 COMMON_SOURCES			:= $(GRAPH_SOURCES) \

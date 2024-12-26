@@ -41,6 +41,7 @@ private:
     void dijkstraAlgorithm() const;
     void floydWarshallAlgorighm() const;
     void primAlgorithm() const;
+    void ACOAlgorithm();
 
     void printMatrix(const Matrix<int>& matrix) const;
 
@@ -51,7 +52,7 @@ private:
 
     Presenter presenter_;
 
-    std::function<void()> options_[8]{
+    std::function<void()> options_[9]{
         {[this](){ std::cout << text_[3]; }},
         {[this](){ this->loadGraph(); }},
         {[this](){ this->exportGraph(); }},
@@ -59,8 +60,8 @@ private:
         {[this](){ this->breadthFirstSearch(); }},
         {[this](){ this->dijkstraAlgorithm(); }},
         {[this](){ this->floydWarshallAlgorighm(); }},
-        {[this](){ this->primAlgorithm(); }}
-
+        {[this](){ this->primAlgorithm(); }},
+        {[this](){ this->ACOAlgorithm(); }}
     };
 
 };

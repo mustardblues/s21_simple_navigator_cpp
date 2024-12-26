@@ -126,14 +126,14 @@ public:
      * @param pos Element index.
      * @return Value stored in the graph.
      */
-    [[ nodiscard ]] int& operator () (const std::size_t pos) {return matrix_(pos); }
+    [[ nodiscard ]] int& operator () (const std::size_t pos) { return matrix_(pos); }
 
     /**
      * @brief Provides access to graph without segmentation fault.
      * @param pos Element index.
      * @return Value stored in the graph.
      */
-    int operator () (const std::size_t pos) const {return matrix_(pos); }
+    int operator () (const std::size_t pos) const { return matrix_(pos); }
 
     /**
      * @brief Returns a first pointer from the graph.

@@ -11,7 +11,7 @@ void Cli::start() const{
         std::cout << "~ ";
         index = this->userInput<int>();
 
-        if(index >= 0 && index < 8){
+        if(index >= 0 && index < 9){
             if(presenter_.graph_.vertices() != 0){
                 options_[index]();
             }
@@ -201,6 +201,12 @@ void Cli::printMatrix(const Matrix<int>& matrix) const{
             std::cout << (j == size - 1 ? "\n" : " ");
         }
     }
+}
+
+void Cli::ACOAlgorithm(){
+    TsmResult result = presenter_.ACOAlgorithm();
+
+    std::cout << "Distance: " << result.distance << "\n";
 }
 
 } // namespace s21

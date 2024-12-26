@@ -1,7 +1,6 @@
 // Copyright 2024 stranger
 
 #include "algorithms.hpp"
-#include <iostream>
 
 namespace s21{
 
@@ -184,6 +183,12 @@ auto GraphAlgorithms::getLeastSpanningTree(const Graph& graph, const std::size_t
     }
 
     return matrix;
+}
+
+TsmResult GraphAlgorithms::solveTravelingSalesmanProblem(const Graph& graph){
+    AntColonyOptimization aco(graph);
+
+    return aco.findPath();
 }
 
 } // namespace s21
