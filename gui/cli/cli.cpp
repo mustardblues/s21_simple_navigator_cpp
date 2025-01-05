@@ -206,7 +206,15 @@ void Cli::printMatrix(const Matrix<int>& matrix) const{
 void Cli::ACOAlgorithm(){
     TsmResult result = presenter_.ACOAlgorithm();
 
-    std::cout << "Distance: " << result.distance << "\n";
+    std::cout << "Sequence of traversing vertices: ";
+
+    for(unsigned int i = 0, size = result.vertices_.size() - 1; i < size; ++i){
+        std::cout << result.vertices_[i] + 1 << "-";
+    }
+
+    std::cout << result.vertices_.back() + 1;
+
+    std::cout << "\nDistance: " << result.distance_ << "\n";
 }
 
 } // namespace s21

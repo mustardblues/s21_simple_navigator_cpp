@@ -8,8 +8,8 @@
 namespace s21{
 
 struct TsmResult final{
-    std::deque<unsigned int> vertices;
-    double distance;
+    std::vector<unsigned int> vertices_;
+    double distance_;
 };
 
 } // namespace s21

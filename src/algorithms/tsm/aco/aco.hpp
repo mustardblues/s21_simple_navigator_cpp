@@ -7,6 +7,7 @@
 #include <random>
 #include <deque>
 
+#include "./../../../constants.hpp"
 #include "./../../../graph/graph.hpp"
 #include "./../tsm_result.hpp"
 
@@ -26,25 +27,40 @@ public:
     TsmResult findPath();
 
 private:
-    const unsigned int max_interations_{100};
+    const unsigned int max_iterations_{500};
 
-    unsigned int start_vertex_{0};
-    unsigned int current_vertex_{0};
+    const double start_pheromone_{0.1};
 
     const double alpha_{1.0};
-    const double beta_{2.0};
+    const double beta_{100.0};
     const double q_{5.0};
-    const double start_pheramone_{1};
-    const double evaporation_{0.6};
+    const double evaporation_{0.9};
 
-    double distance_{};
-    std::vector<unsigned int> vertices_;
-
+    Matrix<double> pheromone_;
     Graph graph_;
-    std::vector<bool> visited_;
-    Matrix<double> pheramone_;
 
-    bool makeChoice();
+    class Ant{
+    public:
+        unsigned int start_vertex_;
+        unsigned int current_vertex_;
+
+        std::vector<bool> visited_;
+
+        TsmResult report_;
+
+        explicit Ant(const unsigned int vertex_number, const unsigned int start_vertex = 0)
+        : start_vertex_(start_vertex),
+        current_vertex_(start_vertex),
+        visited_(vertex_number, false) {
+            visited_[start_vertex] = true;
+
+            report_.vertices_.push_back(start_vertex);
+        }
+
+        ~Ant() = default;
+    };
+
+    bool makeChoice(Ant& ant);
     double makeRandomChoice();
 };
 

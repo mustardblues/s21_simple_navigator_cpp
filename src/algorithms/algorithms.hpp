@@ -5,19 +5,13 @@
 
 #include <deque>
 #include <vector>
-#include <limits>
 
+#include "./../constants.hpp"
 #include "./../graph/graph.hpp"
 #include "./../containers/queue/queue.hpp"
 #include "./../containers/stack/stack.hpp"
 #include "./../containers/priority_queue/priority_queue.hpp"
 #include "tsm/aco/aco.hpp"
-
-namespace s21::Constants{
-
-inline constexpr float inf = std::numeric_limits<float>::max();
-
-} // namespace s21::constants
 
 namespace s21{
 

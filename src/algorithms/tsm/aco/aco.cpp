@@ -2,88 +2,118 @@
 
 #include "aco.hpp"
 
+#include <iostream>
+
 namespace s21{
 
-AntColonyOptimization::AntColonyOptimization(const Graph& graph)
- : graph_(graph), 
- visited_(graph_.vertices(), false), 
- pheramone_(graph_.vertices(), start_pheramone_) {}
+AntColonyOptimization::AntColonyOptimization(const Graph& graph) : pheromone_(graph.vertices(), 0.0), graph_(graph){
+    for(unsigned int i = 0, size = pheromone_.rows(); i < size; ++i){
+        for(unsigned int j = 0; j < size; ++j){
+            if(i != j) pheromone_(i, j) = start_pheromone_;
+        }
+    }
+}
 
 TsmResult AntColonyOptimization::findPath(){
-    if(graph_.vertices() == 0) return {};
-
     TsmResult result;
 
-    for(unsigned int i; i < max_interations_; ++i){
-        Matrix<double> new_pheramone(graph_.vertices(), 0.0f);
+    result.distance_ = Constants::inf;
 
-        for(unsigned int j = 0, size = graph_.vertices(); j < size; ++j){
-            while(this->makeChoice()) {}
+    const unsigned int vertex_number = graph_.vertices();
+    const unsigned int pheromone_number = pheromone_.rows();
 
-            if(vertices_.size() != size + 1){
-                for(unsigned int k = 0, size = vertices_.size() - 1; k < size; ++k){
-                    new_pheramone(vertices_[k], vertices_[k + 1]) += q_ / distance_;
+    for(unsigned int i = 0; i < max_iterations_; ++i){
+        Matrix<double> new_pheromone_portion(vertex_number, 0.0);
+
+        for(unsigned int j = 0; j < vertex_number; ++j){
+            Ant ant(vertex_number, j);
+
+            while(this->makeChoice(ant)) {}
+
+            bool is_correct_size = ant.report_.vertices_.size() == vertex_number + 1;
+            bool is_correct_dist = ant.report_.vertices_.front() == ant.report_.vertices_.back();
+
+            if(is_correct_size && is_correct_dist){
+                for(unsigned int k = 0; k < vertex_number; ++k){
+                    const unsigned int from = ant.report_.vertices_[k];
+                    const unsigned int to = ant.report_.vertices_[k + 1];
+
+                    new_pheromone_portion(from, to) += q_ / ant.report_.distance_;
+                }
+
+                if(ant.report_.distance_ < result.distance_){
+                    result = std::move(ant.report_);
                 }
             }
         }
 
-        for(unsigned int j = 0; j < pheramone_.capacity(); ++j){
-            pheramone_(j) = evaporation_ * pheramone_(j) + new_pheramone(j);
+        for(unsigned int j = 0; j < pheromone_number; ++j){
+            for(unsigned int k = 0; k < pheromone_number; ++k){
+                pheromone_(j, k) = evaporation_ * pheromone_(j, k) + new_pheromone_portion(j, k);
+            }
         }
-
-        distance_ = 0.0f;
-        vertices_.clear();
     }
+
+    for(unsigned int i = 0; i < pheromone_number; ++i){
+        for(unsigned int j = 0; j < pheromone_number; ++j){
+            std::cout << static_cast<int>(pheromone_(i, j)) << " ";
+        }
+        std::cout << "\n";
+    }
+
+    // tests/unit/data/matrix_11.txt
 
     return result;
 }
 
-bool AntColonyOptimization::makeChoice(){
-    std::deque<std::size_t> nearest_vertices;
+bool AntColonyOptimization::makeChoice(Ant& ant){
+    std::deque<unsigned int> neighboring_vertices;
 
-    for(unsigned int i = 0; i < graph_.vertices(); ++i){
-        if(visited_[i] == false && graph_(current_vertex_, i) != 0){
-            nearest_vertices.push_back(i);
+    for(unsigned int i = 0, size = graph_.vertices(); i < size; ++i){
+        if(ant.visited_[i] == false && graph_(ant.current_vertex_, i) != 0){
+            neighboring_vertices.push_back(i);
         }
     }
 
-    if(nearest_vertices.empty()){
-        if(graph_(current_vertex_, start_vertex_) != 0){
-            vertices_.push_back(start_vertex_);
-            distance_ += graph_(current_vertex_, start_vertex_);
+    const unsigned int neighbors_number = neighboring_vertices.size();
+
+    if(neighbors_number == 0){
+        if(graph_(ant.current_vertex_, ant.start_vertex_) != 0){
+            ant.report_.distance_ += graph_(ant.current_vertex_, ant.start_vertex_);
+            ant.report_.vertices_.push_back(ant.start_vertex_);
         }
 
         return false;
     }
 
-    std::deque<double> wish(nearest_vertices.size(), 0.0f);
-    double all_wishes = 0.0f;
+    double all_wishes{};
+    std::deque<double> wish;
 
-    for(auto v : nearest_vertices){
-        wish.push_back(std::pow(pheramone_(current_vertex_, v), alpha_) 
-        * std::pow(graph_(current_vertex_, v), beta_));
+    for(const auto& n : neighboring_vertices){
+        wish.push_back(std::pow(pheromone_(ant.current_vertex_, n), alpha_) 
+        * std::pow(1.0 / graph_(ant.current_vertex_, n), beta_));
+
         all_wishes += wish.back();
     }
 
-    std::vector<double> probability(nearest_vertices.size(), 0.0f);
-    probability[0] = wish[0] / all_wishes;
+    const double choice = this->makeRandomChoice() * all_wishes;
 
-    for(unsigned int i = 1; i < wish.size(); ++i){
-        probability[i] = wish[i] / all_wishes + probability[i - 1];
-    }
-    
-    double choice = makeRandomChoice();
+    double probability_range{};
 
-    for(unsigned int i = 0, size = probability.size(); i < size; ++i){
-        if(choice <= probability[i]){
-            vertices_.push_back(nearest_vertices[i]);
-            distance_ += graph_(current_vertex_, nearest_vertices[i]);
+    for(unsigned int i = 0; i < neighbors_number; ++i){
+        probability_range += wish[i];
 
-            current_vertex_ = nearest_vertices[i];
+        if(choice <= probability_range){
+            double next_vertex = neighboring_vertices[i];
 
-            visited_[i] = true;
+            ant.report_.distance_ += graph_(ant.current_vertex_, next_vertex);
+            ant.report_.vertices_.push_back(next_vertex);
 
-            i = size;
+            ant.visited_[next_vertex] = true;
+
+            ant.current_vertex_ = next_vertex;
+
+            i = neighbors_number;
         }
     }
 
@@ -93,7 +123,7 @@ bool AntColonyOptimization::makeChoice(){
 double AntColonyOptimization::makeRandomChoice(){
     std::random_device rd;
     std::default_random_engine gen(rd());
-    std::uniform_int_distribution<int> dist(0.0, 1.0);
+    std::uniform_real_distribution<double> dist(0.0, 1.0);
 
     return dist(gen);
 }
