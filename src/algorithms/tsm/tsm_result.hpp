@@ -9,7 +9,7 @@ namespace s21{
 
 struct TsmResult final{
     std::vector<unsigned int> vertices_;
-    double distance_;
+    double distance_{0.0};
 };
 
 } // namespace s21

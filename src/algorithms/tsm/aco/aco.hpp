@@ -13,7 +13,7 @@
 
 namespace s21{
 
-class AntColonyOptimization{
+class AntColonyOptimization final{
 public:
     AntColonyOptimization() = delete;
     AntColonyOptimization(const Graph& graph);
@@ -29,12 +29,14 @@ public:
 private:
     const unsigned int max_iterations_{500};
 
+    const unsigned int vertex_number_{0};
+
     const double start_pheromone_{0.1};
 
     const double alpha_{1.0};
-    const double beta_{100.0};
+    const double beta_{2.0};
     const double q_{5.0};
-    const double evaporation_{0.9};
+    const double evaporation_{0.5};
 
     Matrix<double> pheromone_;
     Graph graph_;
@@ -49,9 +51,7 @@ private:
         TsmResult report_;
 
         explicit Ant(const unsigned int vertex_number, const unsigned int start_vertex = 0)
-        : start_vertex_(start_vertex),
-        current_vertex_(start_vertex),
-        visited_(vertex_number, false) {
+        : start_vertex_(start_vertex), current_vertex_(start_vertex), visited_(vertex_number, false){
             visited_[start_vertex] = true;
 
             report_.vertices_.push_back(start_vertex);
@@ -60,7 +60,7 @@ private:
         ~Ant() = default;
     };
 
-    bool makeChoice(Ant& ant);
+    void antRun(Ant& ant);
     double makeRandomChoice();
 };
 

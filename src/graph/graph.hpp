@@ -30,6 +30,7 @@ enum class GraphType : char{
  * @details Graph class contains data about the vertices and 
  * edges of a graph in the format of an adjacency matrix.
  */
+template <typename T>
 class Graph final{
 public:
     /**
@@ -178,7 +179,7 @@ public:
 private:
     std::size_t vertices_;
 
-    Matrix<int> matrix_;
+    T* data_;
 };
 
 } // namespace s21
