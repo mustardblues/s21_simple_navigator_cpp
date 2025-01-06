@@ -63,26 +63,13 @@ void Cli::exportGraph() const{
     std::cout << text_[4] << "~ ";
     std::filesystem::path path = this->userInput<std::filesystem::path>();
 
-    std::cout << text_[5] << "~ ";
-    int format = this->userInput<int>();
+    presenter_.exportGraph(path);
 
-    if(format == 0){
-        presenter_.exportUndirectedGraph(path);
-
-        std::cout << text_[0] << "\n";
-    }
-    else if(format == 1){
-        presenter_.exportDirectedGraph(path);
-
-        std::cout << text_[0] << "\n";
-    }
-    else{
-        std::cout << text_[1] << "\n";
-    }
+    std::cout << text_[0] << "\n";
 }
 
 void Cli::depthFirstSearch() const{
-    std::cout << text_[6] << "~ ";
+    std::cout << text_[5] << "~ ";
     int start_vertex = this->userInput<int>();
 
     std::deque<unsigned int> dist = presenter_.depthFirstSearch(start_vertex);
@@ -103,7 +90,7 @@ void Cli::depthFirstSearch() const{
 }
 
 void Cli::breadthFirstSearch() const{
-    std::cout << text_[6] << "~ ";
+    std::cout << text_[5] << "~ ";
     int start_vertex = this->userInput<int>();
 
     std::deque<unsigned int> dist = presenter_.breadthFirstSearch(start_vertex);
@@ -127,7 +114,7 @@ void Cli::dijkstraAlgorithm() const{
     std::cout << text_[6] << "~ ";
     int begin = this->userInput<int>();
 
-    std::cout << text_[7] << "~ ";
+    std::cout << text_[6] << "~ ";
     int end = this->userInput<int>();
 
     if(begin < 0 || end < 0){
@@ -148,7 +135,7 @@ void Cli::floydWarshallAlgorighm() const{
 }
 
 void Cli::primAlgorithm() const{
-    std::cout << text_[6] << "~ ";
+    std::cout << text_[5] << "~ ";
     int start_vertex = this->userInput<int>();
 
     if(start_vertex < 0){

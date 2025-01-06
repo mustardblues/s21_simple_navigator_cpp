@@ -22,7 +22,7 @@ inline constexpr std::initializer_list<int> list{
 TEST(Graph, init){
     {
         // Arrange
-        s21::Graph graph;
+        s21::Graph<int> graph;
 
         // Assert
         ASSERT_EQ(graph.vertices(), 0);
@@ -30,7 +30,7 @@ TEST(Graph, init){
 
     {
         // Arrange
-        s21::Graph graph(100);
+        s21::Graph<int> graph(100);
 
         // Assert
         ASSERT_EQ(graph.vertices(), 100);        
@@ -38,8 +38,8 @@ TEST(Graph, init){
 
     {
         // Arrange
-        s21::Graph graph_1(100);
-        s21::Graph graph_2(graph_1);
+        s21::Graph<int> graph_1(100);
+        s21::Graph<int> graph_2(graph_1);
 
         // Assert
         ASSERT_EQ(graph_1, graph_2);  
@@ -47,8 +47,8 @@ TEST(Graph, init){
 
     {
         // Arrange
-        s21::Graph graph_1(100);
-        s21::Graph graph_2(std::move(graph_1));
+        s21::Graph<int> graph_1(100);
+        s21::Graph<int> graph_2(std::move(graph_1));
 
         // Assert
         EXPECT_EQ(graph_1.vertices(), 0); 
@@ -59,7 +59,7 @@ TEST(Graph, init){
 TEST(Graph, operators){
     {
         // Arrange
-        s21::Graph graph;
+        s21::Graph<int> graph;
 
         // Assert
         ASSERT_EQ(graph(10, 10), 0);
@@ -67,7 +67,7 @@ TEST(Graph, operators){
 
     {
         // Arrange
-        const s21::Graph graph;
+        const s21::Graph<int> graph;
 
         // Assert
         ASSERT_EQ(graph(10, 10), 0);
@@ -75,7 +75,7 @@ TEST(Graph, operators){
 
     {
         // Arrange
-        s21::Graph graph(2);
+        s21::Graph<int> graph(2);
 
         // Act
         graph(0, 0) = 1;
@@ -92,14 +92,14 @@ TEST(Graph, operators){
 
     {
         // Arrange
-        s21::Graph graph_1(2);
+        s21::Graph<int> graph_1(2);
 
         graph_1(0, 0) = 1;
         graph_1(0, 1) = 2;
         graph_1(1, 0) = 3;
         graph_1(1, 1) = 4;
 
-        s21::Graph graph_2(std::move(graph_1));
+        s21::Graph<int> graph_2(std::move(graph_1));
 
         // Assert
         EXPECT_EQ(graph_2(0, 0), 1);
@@ -110,14 +110,14 @@ TEST(Graph, operators){
 
     {
         // Arrange
-        s21::Graph graph_1(2);
+        s21::Graph<int> graph_1(2);
 
         graph_1(0, 0) = 1;
         graph_1(0, 1) = 2;
         graph_1(1, 0) = 3;
         graph_1(1, 1) = 4;
 
-        s21::Graph graph_2(graph_1);
+        s21::Graph<int> graph_2(graph_1);
 
         // Act
         bool is_equal{graph_1 == graph_2};
@@ -128,14 +128,14 @@ TEST(Graph, operators){
 
     {
         // Arrange
-        s21::Graph graph_1(2);
+        s21::Graph<int> graph_1(2);
 
         graph_1(0, 0) = 1;
         graph_1(0, 1) = 2;
         graph_1(1, 0) = 3;
         graph_1(1, 1) = 4;
 
-        s21::Graph graph_2(std::move(graph_1));
+        s21::Graph<int> graph_2(std::move(graph_1));
 
         // Act
         bool is_equal{graph_1 == graph_2};
@@ -146,14 +146,14 @@ TEST(Graph, operators){
 
     {
         // Arrange
-        s21::Graph graph_1(2);
+        s21::Graph<int> graph_1(2);
 
         graph_1(0, 0) = 1;
         graph_1(0, 1) = 2;
         graph_1(1, 0) = 3;
         graph_1(1, 1) = 4;
 
-        s21::Graph graph_2;
+        s21::Graph<int> graph_2;
 
         // Act
         graph_2 = graph_1;
@@ -164,15 +164,15 @@ TEST(Graph, operators){
 
     {
         // Arrange
-        s21::Graph graph_1(2);
+        s21::Graph<int> graph_1(2);
 
         graph_1(0, 0) = 1;
         graph_1(0, 1) = 2;
         graph_1(1, 0) = 3;
         graph_1(1, 1) = 4;
 
-        s21::Graph graph_2(graph_1);
-        s21::Graph graph_3;
+        s21::Graph<int> graph_2(graph_1);
+        s21::Graph<int> graph_3;
 
         // Act
         graph_3 = std::move(graph_1);
@@ -186,7 +186,7 @@ TEST(Graph, operators){
 TEST(Graph, begin){
     {
         // Arrange
-        s21::Graph graph;
+        s21::Graph<int> graph;
 
         // Assert
         EXPECT_EQ(graph.begin(), nullptr);
@@ -194,7 +194,7 @@ TEST(Graph, begin){
 
     {
         // Arrange
-        s21::Graph graph(1);
+        s21::Graph<int> graph(1);
 
         graph(0, 0) = 1;
 
@@ -206,7 +206,7 @@ TEST(Graph, begin){
 TEST(Graph, end){
     {
         // Arrange
-        s21::Graph graph;
+        s21::Graph<int> graph;
 
         // Assert
         EXPECT_EQ(graph.end(), nullptr);
@@ -214,7 +214,7 @@ TEST(Graph, end){
 
     {
         // Arrange
-        s21::Graph graph(10);
+        s21::Graph<int> graph(10);
 
         graph(9, 9) = 1;
 
@@ -226,7 +226,7 @@ TEST(Graph, end){
 TEST(Graph, loadGraphFromFile){
     {
         // Arrange
-        s21::Graph graph(10);
+        s21::Graph<int> graph(10);
 
         // Act
         bool code = graph.loadGraphFromFile("");
@@ -238,11 +238,11 @@ TEST(Graph, loadGraphFromFile){
 
     {
         // Arrange
-        s21::Graph graph_1(11);
+        s21::Graph<int> graph_1(11);
 
         std::copy(list.begin(), list.end(), graph_1.begin());
 
-        s21::Graph graph_2(11);
+        s21::Graph<int> graph_2(11);
 
         // Act
         bool code = graph_2.loadGraphFromFile("tests/unit/data/matrix_11.txt");
@@ -256,10 +256,10 @@ TEST(Graph, loadGraphFromFile){
 TEST(Graph, exportGraphToDot){
     {
         // Arrange
-        s21::Graph graph;
+        s21::Graph<int> graph;
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>("");
+        bool code = graph.exportGraphToDot("");
 
         // Assert
         EXPECT_EQ(code, false);
@@ -267,14 +267,14 @@ TEST(Graph, exportGraphToDot){
 
     {
         // Arrange
-        s21::Graph graph(11);
+        s21::Graph<int> graph(11);
 
         std::copy(list.begin(), list.end(), graph.begin());
 
         std::filesystem::path filepath("graph.dot");
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Undirected>(filepath);
+        bool code = graph.exportGraphToDot(filepath);
 
         // Assert
         EXPECT_EQ(std::filesystem::exists(filepath), true);
@@ -285,10 +285,10 @@ TEST(Graph, exportGraphToDot){
 
     {
         // Arrange
-        s21::Graph graph;
+        s21::Graph<int> graph;
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("");
+        bool code = graph.exportGraphToDot("");
 
         // Assert
         EXPECT_EQ(code, false);
@@ -296,14 +296,14 @@ TEST(Graph, exportGraphToDot){
 
     {
         // Arrange
-        s21::Graph graph(11);
+        s21::Graph<int> graph(11);
 
         std::copy(list.begin(), list.end(), graph.begin());
 
         std::filesystem::path filepath("graph.dot");
 
         // Act
-        bool code = graph.exportGraphToDot<s21::GraphType::Directed>("graph");
+        bool code = graph.exportGraphToDot("graph");
 
         // Assert
         EXPECT_EQ(std::filesystem::exists(filepath), true);

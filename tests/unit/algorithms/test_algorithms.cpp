@@ -4,10 +4,11 @@
 
 #include "./../../../src/algorithms/algorithms.hpp"
 
-const s21::Graph graph_1("tests/unit/data/matrix_6_1.txt");
-const s21::Graph graph_2("tests/unit/data/matrix_6_2.txt");
-const s21::Graph graph_3("tests/unit/data/matrix_6_3.txt");
-const s21::Graph empty;
+const s21::Graph<int> graph_1("tests/unit/data/matrix_6_1.txt");
+const s21::Graph<int> graph_2("tests/unit/data/matrix_6_2.txt");
+const s21::Graph<int> graph_3("tests/unit/data/matrix_6_3.txt");
+const s21::Graph<int> graph_4("tests/unit/data/matrix_4.txt");
+const s21::Graph<int> empty;
 
 TEST(GraphAlgorithms, depthFirstSearch){
     {
@@ -115,7 +116,7 @@ TEST(GraphAlgorithms, breadthFirstSearch){
         // Assert
         ASSERT_EQ(result, path);
 
-        s21::Graph graph;
+        s21::Graph<int> graph;
     }
 
     {
@@ -304,5 +305,24 @@ TEST(GraphAlgorithms, getLeastSpanningTree){
 
         // Assert
         ASSERT_EQ(result.capacity(), 0);
+    }
+}
+
+TEST(GraphAlgorithms, solveTravelingSalesmanProblem){
+    {
+        // Act
+        s21::TsmResult result = s21::GraphAlgorithms::solveTravelingSalesmanProblem(graph_4);
+
+        // Assert
+        ASSERT_EQ(result.vertices_.size(), 5);
+        ASSERT_EQ(result.distance_, 40.0);
+    }
+
+    {
+        // Act
+        s21::TsmResult result = s21::GraphAlgorithms::solveTravelingSalesmanProblem(empty);
+
+        // Assert
+        ASSERT_EQ(result.vertices_.size(), 0);
     }
 }

@@ -4,17 +4,18 @@
 
 namespace s21{
 
-AntColonyOptimization::AntColonyOptimization(const Graph& graph) 
+AntColonyOptimization::AntColonyOptimization(const Graph<int>& graph) 
 : vertex_number_(graph.vertices()), pheromone_(vertex_number_, start_pheromone_), graph_(graph){
     for(unsigned int i = 0; i < vertex_number_; ++i){
         pheromone_(i, i) = 0;
     }
 }
 
-
 TsmResult AntColonyOptimization::findPath(){
     TsmResult result;
     result.distance_ = Constants::inf;
+
+    if(graph_.empty()) return result;
 
     for(unsigned int i = 0; i < max_iterations_; ++i){
         Matrix<double> new_pheromon_portion(vertex_number_, 0.0);

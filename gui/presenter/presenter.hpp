@@ -25,12 +25,8 @@ public:
         return graph_.loadGraphFromFile(path);
     }
 
-    bool exportUndirectedGraph(const std::filesystem::path& path) const{
-        return graph_.exportGraphToDot<GraphType::Undirected>(path);
-    }
-
-    bool exportDirectedGraph(const std::filesystem::path& path) const{
-        return graph_.exportGraphToDot<GraphType::Directed>(path);
+    bool exportGraph(const std::filesystem::path& path) const{
+        return graph_.exportGraphToDot(path);
     }
 
     auto depthFirstSearch(const std::size_t start_vertex) const -> std::deque<unsigned int>{
@@ -57,7 +53,7 @@ public:
         return GraphAlgorithms::solveTravelingSalesmanProblem(graph_);
     }
 
-    Graph graph_;
+    Graph<int> graph_;
 };
 
 } // namespace s21

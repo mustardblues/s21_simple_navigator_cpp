@@ -7,16 +7,25 @@
 #include <random>
 #include <deque>
 
-#include "./../../../constants.hpp"
+#include "./../../../constants/constants.hpp"
 #include "./../../../graph/graph.hpp"
 #include "./../tsm_result.hpp"
 
 namespace s21{
 
+/**
+ * @class AntColonyOptimization
+ * @brief Finds a solution to the traveling salesman problem.
+ */
 class AntColonyOptimization final{
 public:
     AntColonyOptimization() = delete;
-    AntColonyOptimization(const Graph& graph);
+
+    /**
+     * @brief Class constructor that accepts a graph class.
+     */
+    AntColonyOptimization(const Graph<int>& graph);
+
     AntColonyOptimization(const AntColonyOptimization& other) = delete;
     AntColonyOptimization(AntColonyOptimization&& other) = delete;
     ~AntColonyOptimization() = default;
@@ -24,6 +33,10 @@ public:
     AntColonyOptimization& operator = (const AntColonyOptimization& other) = delete;
     AntColonyOptimization& operator = (AntColonyOptimization&& other) = delete;
 
+    /**
+     * @brief Finds a solution to the traveling salesman problem using a standard ACO algorithm.
+     * @return Returns a data structure with visited vertices and the distance between them.
+     */
     TsmResult findPath();
 
 private:
@@ -39,8 +52,12 @@ private:
     const double evaporation_{0.5};
 
     Matrix<double> pheromone_;
-    Graph graph_;
+    Graph<int> graph_;
 
+    /**
+     * @class Ant
+     * @brief Used in the AntColonyOptimization class.
+     */
     class Ant{
     public:
         unsigned int start_vertex_;
@@ -54,6 +71,7 @@ private:
         : start_vertex_(start_vertex), current_vertex_(start_vertex), visited_(vertex_number, false){
             visited_[start_vertex] = true;
 
+            report_.distance_ = 0.0;
             report_.vertices_.push_back(start_vertex);
         }
 

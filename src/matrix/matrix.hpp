@@ -150,7 +150,7 @@ class Matrix {
   [[nodiscard]] T& operator()(const std::size_t row, const std::size_t col) {
     if (row < rows_ && col < columns_) return data_[row * columns_ + col];
 
-    static T default_value{0};
+    static T default_value{};
 
     return default_value;
   }

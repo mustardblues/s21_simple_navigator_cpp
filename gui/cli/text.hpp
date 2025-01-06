@@ -40,18 +40,12 @@
     "Select file name:\n"
 },
 
-// 5 Select graph format
-
-{
-    "Select graph format? 0 (undirected) 1 (directed):\n"
-},
-
-// 6 Select start vertex
+// 5 Select start vertex
 {
     "Select start vertex:\n"
 },
 
-// 7 Select start vertex
+// 6 Select start vertex
 {
     "Select last vertex:\n"
 }

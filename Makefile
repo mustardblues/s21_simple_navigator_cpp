@@ -10,22 +10,12 @@ SYSFLAGS				+= -pthread -lrt -lm
 
 endif
 
-
-
-
-GRAPH_SOURCES			:= src/graph/graph.cpp
-GRAPH_OBJECTS			:= graph.o
-
 ALGORITMS_SOURCES		:= src/algorithms/algorithms.cpp \
 							src/algorithms/tsm/aco/aco.cpp
 
 ALGORITMS_OBJECTS		:= algorithms.o
 
-COMMON_SOURCES			:= $(GRAPH_SOURCES) \
-							$(ALGORITMS_SOURCES)
-
-
-
+COMMON_SOURCES			:= $(ALGORITMS_SOURCES)
 
 MATRIX_TEST_SOURCES		:= tests/unit/matrix/test_matrix.cpp
 
@@ -41,9 +31,6 @@ COMMON_TEST_SOURCES		:= $(MATRIX_TEST_SOURCES) \
 							$(CONTAINERS_TEST_SOURCES) \
 							$(GRAPH_TEST_SOURCES) \
 							$(ALGORITMS_TEST_SOURCES)
-
-
-
 
 CLI_SOURCES				:= gui/cli/cli.cpp \
 							gui/cli/main.cpp
@@ -63,6 +50,15 @@ help:
 .PHONY: docker
 docker:
 	./tests/docker/run.sh
+
+.PHONY: dvi
+dvi: # creates project documentation
+	@ cd dvi/ && doxygen
+	open dvi/html/index.html
+
+.PHONY: dist
+dist: # creates a .tar archive including all project files
+	tar -czvf ./../s21_simple_navigator.tar .
 
 # ------------------------------------------------------------------------------------- Application
 
@@ -96,7 +92,7 @@ test_algorithms: #testing of GraphAlgorithms class
 
 .PHONY: test_graph
 test_graph: #testing of Graph class
-	$(CXX) $(CXXFLAGS) --coverage $(GRAPH_TEST_SOURCES) $(GRAPH_SOURCES) \
+	$(CXX) $(CXXFLAGS) --coverage $(GRAPH_TEST_SOURCES) \
 	tests/unit/main.cpp -o test_graph $(SYSFLAGS) && ./test_graph
 
 .PHONY: test_containers
@@ -162,6 +158,6 @@ clean:
 	- rm *.dot
 	- rm -rf gcov_report
 	- rm *.gcno *.gcda *.info
-	- rm -rf dvi/doxygen
+	- rm -rf dvi/html
 
 rebuild: clean all
